@@ -34,6 +34,12 @@ public class Carga {
 	 */
 	@JsonProperty(value="diasEnPuerto")
 	private int diasEnPuerto;
+	
+	/**
+	 * tipo de carga de la carga
+	 */
+	@JsonProperty(value="tipoCarga")
+	private TipoDeCarga tipoCarga;
 
 	/**
 	 * metodo constructor de la clase carga
@@ -43,7 +49,7 @@ public class Carga {
 	 * @param estado el estado de la carga
 	 * @param diasEnPuerto los dias en el puerto de la carga
 	 */
-	public Carga(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="peso") double peso, @JsonProperty(value="estado")char estado,@JsonProperty(value="diasEnPuerto") int diasEnPuerto) 
+	public Carga(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="peso") double peso, @JsonProperty(value="estado")char estado,@JsonProperty(value="diasEnPuerto") int diasEnPuerto,@JsonProperty(value="tipoCarga") TipoDeCarga tipoCarga) 
 	{
 		super();
 		this.id = id;
@@ -51,6 +57,7 @@ public class Carga {
 		this.peso = peso;
 		this.estado = estado;
 		this.diasEnPuerto = diasEnPuerto;
+		this.tipoCarga = tipoCarga;
 	}
 	
 	/**
