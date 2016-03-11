@@ -2,6 +2,7 @@
     <wb-module deploy-name="PuertoAndesV2">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test/source"/>
         <property name="context-root" value="PuertoAndesV2"/>
         <property name="java-output-path" value="/PuertoAndesV2/build/classes"/>
     </wb-module>
