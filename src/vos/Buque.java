@@ -38,11 +38,12 @@ public class Buque {
 	private List<TipoDeCarga> tiposCarga;
 	
 	/**
-	 * mwtodo constructor de la clase buque
+	 * metodo constructor de la clase buque
 	 * @param id el id del buque
 	 * @param nombre el nombre del buque
-	 * @param registro el numero de registro del buque
-	 * @param agente el nombre del agente maritimo del buque
+	 * @param registro el registro del buque
+	 * @param agente el nombre del agente del buque
+	 * @param tiposDeCarga ls tipos de carga en un buque
 	 */
 	public Buque(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="registro") String registro, @JsonProperty(value="agente")String agente, @JsonProperty(value="tiposCarga")List<TipoDeCarga> tiposDeCarga) 
 	{
