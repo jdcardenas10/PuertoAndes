@@ -31,7 +31,7 @@ public class Importador extends Usuario {
 	@JsonProperty(value="importadas")
 	private List<Carga> importadas;
 		
-	
+
 	/**
 	 * metodo constructor de la clase importador
 	 * @param id el id del usuario
@@ -40,6 +40,8 @@ public class Importador extends Usuario {
 	 * @param clave la clave del usuario
 	 * @param tipo el tipo de importador
 	 * @param registro el registro del importador
+	 * @param entregas las entregas que ha realizado el importador
+	 * @param importadas las cargas impostadas del importador
 	 */
 	public Importador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,  @JsonProperty(value="tipo")char tipo,  @JsonProperty(value="registro")String registro, @JsonProperty(value="entregas")List entregas,  @JsonProperty(value="importadas")List<Carga> importadas) 
 	{
