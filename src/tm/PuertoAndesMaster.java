@@ -94,6 +94,9 @@ public class PuertoAndesMaster {
 	///////Transacciones////////////////////
 	////////////////////////////////////////
 
+	public void consultarArribos(){
+		
+	}
 
 	
 }
