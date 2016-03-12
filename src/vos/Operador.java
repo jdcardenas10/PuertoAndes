@@ -10,13 +10,13 @@ public class Operador extends Usuario{
 	 * las facturas hechas al exportador
 	 */
 	@JsonProperty(value="cargues")
-	private List cargues;
+	private List<Cargue> cargues;
 	
 	/**
 	 * las facturas hechas al exportador
 	 */
 	@JsonProperty(value="descargues")
-	private List descargues;
+	private List<Descargue> descargues;
 
 	/**
 	 * metodo constructor de la clase operador
@@ -27,7 +27,7 @@ public class Operador extends Usuario{
 	 * @param cargues los cargues del operador
 	 * @param descargues los descargues del operador
 	 */
-	public Operador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,@JsonProperty(value="cargues") List cargues, @JsonProperty(value="descargues")List descargues)
+	public Operador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,@JsonProperty(value="cargues") List<Cargue> cargues, @JsonProperty(value="descargues")List<Descargue> descargues)
 	{
 		super(id, nombre, login, clave);
 		this.cargues = cargues;
@@ -38,7 +38,7 @@ public class Operador extends Usuario{
 	 * metodo que retorna los cargues del operador
 	 * @return
 	 */
-	public List getCargues() {
+	public List<Cargue> getCargues() {
 		return cargues;
 	}
 
@@ -46,7 +46,7 @@ public class Operador extends Usuario{
 	 * metodo que cambia los cargues de un operador
 	 * @param cargues
 	 */
-	public void setCargues(List cargues) {
+	public void setCargues(List<Cargue> cargues) {
 		this.cargues = cargues;
 	}
 
@@ -54,7 +54,7 @@ public class Operador extends Usuario{
 	 * metodo que retorna los descargues de un operador
 	 * @return
 	 */
-	public List getDescargues() {
+	public List<Descargue> getDescargues() {
 		return descargues;
 	}
 
@@ -62,7 +62,7 @@ public class Operador extends Usuario{
 	 * metodo que cambia los descargues de un operador
 	 * @param descargues
 	 */
-	public void setDescargues(List descargues) {
+	public void setDescargues(List<Descargue> descargues) {
 		this.descargues = descargues;
 	}
 	

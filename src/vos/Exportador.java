@@ -16,7 +16,7 @@ public class Exportador extends Usuario{
 	 * las facturas hechas al exportador
 	 */
 	@JsonProperty(value="facturas")
-	private List facturas;
+	private List<Factura> facturas;
 
 	/**
 	 * las cargas que ha exportado el exportador
@@ -34,7 +34,7 @@ public class Exportador extends Usuario{
 	 * @param facturas las facturas del exportador
 	 * @param exportadas las cargas exportadas del exportador
 	 */
-	public Exportador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave, @JsonProperty(value="rut")String rut, @JsonProperty(value="facturas")List facturas,  @JsonProperty(value="exportadas")List<Carga> exportadas) 
+	public Exportador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave, @JsonProperty(value="rut")String rut, @JsonProperty(value="facturas")List<Factura> facturas,  @JsonProperty(value="exportadas")List<Carga> exportadas) 
 	{
 		super(id,nombre,login,clave);
 		this.rut=rut;
@@ -62,7 +62,7 @@ public class Exportador extends Usuario{
 	 * metodo que retorna las facturas del exportador
 	 * @return
 	 */
-	public List getFacturas() {
+	public List<Factura> getFacturas() {
 		return facturas;
 	}
 
@@ -70,7 +70,7 @@ public class Exportador extends Usuario{
 	 * metodo que cambia las facturas del exportador
 	 * @param facturas
 	 */
-	public void setFacturas(List facturas) {
+	public void setFacturas(List<Factura> facturas) {
 		this.facturas = facturas;
 	}
 

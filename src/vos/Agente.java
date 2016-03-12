@@ -10,14 +10,14 @@ public class Agente extends Usuario{
 	/**
 	 * las llegadas de un agente
 	 */
-	@JsonProperty(value="llegadas")
-	private List llegadas;
+	@JsonProperty(value="arribos")
+	private List<Arribo> arribos;
 	
 	/**
 	 * las salidas de un agente
 	 */
 	@JsonProperty(value="salidas")
-	private List salidas;
+	private List<Salida> salidas;
 	
 	/**
 	 * metodo constructor de la clase agente
@@ -28,10 +28,10 @@ public class Agente extends Usuario{
 	 * @param llegadas las llegadas del agente
 	 * @param salidas las salidas del agente
 	 */
-	public Agente(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,@JsonProperty(value="llegadas") List llegadas, @JsonProperty(value="salidas")List salidas)
+	public Agente(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,@JsonProperty(value="arribos") List<Arribo> llegadas, @JsonProperty(value="salidas")List<Salida> salidas)
 	{
 		super(id, nombre, login, clave);
-		this.llegadas= llegadas;
+		this.arribos= llegadas;
 		this.salidas= salidas;
 	}
 
@@ -39,23 +39,23 @@ public class Agente extends Usuario{
 	 * metodo que retorna las llegadas de un agente
 	 * @return
 	 */
-	public List getLlegadas() {
-		return llegadas;
+	public List<Arribo> getLlegadas() {
+		return arribos;
 	}
 
 	/**
 	 * metodo que cambia las llegadas de un agente
 	 * @param llegadas
 	 */
-	public void setLlegadas(List llegadas) {
-		this.llegadas = llegadas;
+	public void setLlegadas(List<Arribo> llegadas) {
+		this.arribos = llegadas;
 	}
 
 	/**
 	 * metodo que retorna las salidas de un agente
 	 * @return
 	 */
-	public List getSalidas() {
+	public List<Salida> getSalidas() {
 		return salidas;
 	}
 
@@ -63,7 +63,7 @@ public class Agente extends Usuario{
 	 * metodo que cambia las salidas de un agente
 	 * @param salidas
 	 */
-	public void setSalidas(List salidas) {
+	public void setSalidas(List<Salida> salidas) {
 		this.salidas = salidas;
 	}
 	

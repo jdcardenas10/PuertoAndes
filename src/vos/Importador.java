@@ -23,7 +23,7 @@ public class Importador extends Usuario {
 	 * las entregas que se le han realizado al imporrtador
 	 */
 	@JsonProperty(value="entregas")
-	private List entregas;
+	private List<Entrega> entregas;
 
 	/**
 	 * las cargas que ha importado el importador
@@ -43,7 +43,7 @@ public class Importador extends Usuario {
 	 * @param entregas las entregas que ha realizado el importador
 	 * @param importadas las cargas impostadas del importador
 	 */
-	public Importador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,  @JsonProperty(value="tipo")char tipo,  @JsonProperty(value="registro")String registro, @JsonProperty(value="entregas")List entregas,  @JsonProperty(value="importadas")List<Carga> importadas) 
+	public Importador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave,  @JsonProperty(value="tipo")char tipo,  @JsonProperty(value="registro")String registro, @JsonProperty(value="entregas")List<Entrega> entregas,  @JsonProperty(value="importadas")List<Carga> importadas) 
 	{
 		super(id,nombre,login,clave);
 		this.tipo=tipo;
@@ -89,7 +89,7 @@ public class Importador extends Usuario {
 	 * metodo que retorna las entregas hechas a un importador
 	 * @return
 	 */
-	public List getEntregas() {
+	public List<Entrega> getEntregas() {
 		return entregas;
 	}
 
@@ -97,7 +97,7 @@ public class Importador extends Usuario {
 	 * metodo que cambia las entregas del importador
 	 * @param entregas
 	 */
-	public void setEntregas(List entregas) {
+	public void setEntregas(List<Entrega> entregas) {
 		this.entregas = entregas;
 	}
 
