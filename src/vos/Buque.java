@@ -38,14 +38,29 @@ public class Buque {
 	private List<TipoDeCarga> tiposCarga;
 	
 	/**
+	 * nombre del agente maritimo
+	 */
+	@JsonProperty(value="capacidad")
+	private Double capacidad;
+	
+	/**
+	 * los tipos de carga del buque
+	 */
+	@JsonProperty(value="usado")
+	private Double usado;
+	
+	/**
 	 * metodo constructor de la clase buque
 	 * @param id el id del buque
 	 * @param nombre el nombre del buque
 	 * @param registro el registro del buque
 	 * @param agente el nombre del agente del buque
 	 * @param tiposDeCarga ls tipos de carga en un buque
+	 * @param capacidad 
+	 * @param usado 
 	 */
-	public Buque(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="registro") String registro, @JsonProperty(value="agente")String agente, @JsonProperty(value="tiposCarga")List<TipoDeCarga> tiposDeCarga) 
+	public Buque(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="registro") String registro, @JsonProperty(value="agente")String agente
+			, @JsonProperty(value="tiposCarga")List<TipoDeCarga> tiposDeCarga,@JsonProperty(value="capacidad") Double capacidad, @JsonProperty(value="usado")Double usado) 
 	{
 		super();
 		this.id = id;
@@ -53,6 +68,8 @@ public class Buque {
 		this.registro = registro;
 		this.agente = agente;
 		this.tiposCarga = tiposDeCarga;
+		this.setCapacidad(capacidad);
+		this.setUsado(usado);
 	}
 
 	/**
@@ -133,6 +150,22 @@ public class Buque {
 	 */
 	public void setTiposCarga(List<TipoDeCarga> tiposCarga) {
 		this.tiposCarga = tiposCarga;
+	}
+
+	public Double getCapacidad() {
+		return capacidad;
+	}
+
+	public void setCapacidad(Double capacidad) {
+		this.capacidad = capacidad;
+	}
+
+	public Double getUsado() {
+		return usado;
+	}
+
+	public void setUsado(Double usado) {
+		this.usado = usado;
 	}
 	
 	

@@ -24,6 +24,12 @@ public class Salida extends Operacion{
 	@JsonProperty(value="buque")
 	private Buque buque;
 	
+	/**
+	 * el camion que sale, si hubo
+	 */
+	@JsonProperty(value="camion")
+	private Camion camion;
+	
 	
 	
 	/**
@@ -36,11 +42,13 @@ public class Salida extends Operacion{
 	 * @param muelle el buelle al que arriba el buque
 	 * @param buque el buque que arriba
 	 */
-	public Salida(@JsonProperty(value="id") int id,@JsonProperty(value="tipo") char tipo,@JsonProperty(value="fecha") Date fecha,@JsonProperty(value="carga") Carga carga, @JsonProperty(value="tipoArribo") char tipoArribo, @JsonProperty(value="muelle") Muelle muelle, @JsonProperty(value="buque") Buque buque) {
+	public Salida(@JsonProperty(value="id") int id,@JsonProperty(value="tipo") char tipo,@JsonProperty(value="fecha") Date fecha,@JsonProperty(value="carga") Carga carga, @JsonProperty(value="tipoArribo") char tipoArribo, @JsonProperty(value="muelle") Muelle muelle
+			, @JsonProperty(value="buque") Buque buque, @JsonProperty(value="camion") Camion camion) {
 		super(id, tipo, fecha, carga);
 		this.tipoArribo=tipoArribo;
 		this.muelle=muelle;
 		this.buque=buque;
+		this.setCamion(camion);
 	}
 
 	/**
@@ -89,6 +97,14 @@ public class Salida extends Operacion{
 	 */
 	public void setBuque(Buque buque) {
 		this.buque = buque;
+	}
+
+	public Camion getCamion() {
+		return camion;
+	}
+
+	public void setCamion(Camion camion) {
+		this.camion = camion;
 	}
 	
 	

@@ -36,6 +36,12 @@ public class Arribo extends Operacion{
 	@JsonProperty(value="destino")
 	private Puerto destino;
 	
+	/**
+	 * el camion utilizado si es que hubo
+	 */
+	@JsonProperty(value="camion")
+	private Camion camion;
+	
 	
 	/**
 	 * metodo constructor de la clase arribo
@@ -49,13 +55,15 @@ public class Arribo extends Operacion{
 	 * @param origen puerto del que proviene el buque
 	 * @param destino el puerto hacia donde va el buque
 	 */
-	public Arribo(@JsonProperty(value="id") int id,@JsonProperty(value="tipo") char tipo,@JsonProperty(value="fecha") Date fecha,@JsonProperty(value="carga") Carga carga, @JsonProperty(value="tipoArribo") char tipoArribo, @JsonProperty(value="muelle") Muelle muelle, @JsonProperty(value="buque") Buque buque, @JsonProperty(value="origen") Puerto origen,  @JsonProperty(value="destino") Puerto destino) {
+	public Arribo(@JsonProperty(value="id") int id,@JsonProperty(value="tipo") char tipo,@JsonProperty(value="fecha") Date fecha,@JsonProperty(value="carga") Carga carga, @JsonProperty(value="tipoArribo") char tipoArribo, @JsonProperty(value="muelle") Muelle muelle, @JsonProperty(value="buque") Buque buque, @JsonProperty(value="origen") Puerto origen
+			,  @JsonProperty(value="destino") Puerto destino,  @JsonProperty(value="camion") Camion camion) {
 		super(id, tipo, fecha, carga);
 		this.tipoArribo=tipoArribo;
 		this.muelle=muelle;
 		this.buque=buque;
 		this.origen=origen;
 		this.destino=destino;
+		this.camion=camion;
 	}
 
 
@@ -146,6 +154,16 @@ public class Arribo extends Operacion{
 
 	public void setDestino(Puerto destino) {
 		this.destino = destino;
+	}
+
+
+	public Camion getCamion() {
+		return camion;
+	}
+
+
+	public void setCamion(Camion camion) {
+		this.camion = camion;
 	}
 	
 	

@@ -15,9 +15,10 @@ public class Multiproposito extends Buque{
 	 * @param agente el nombre del agente del buque
 	 * @param tiposDeCarga ls tipos de carga en un buque
 	 */
-	public Multiproposito(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="registro") String registro, @JsonProperty(value="agente")String agente, @JsonProperty(value="tiposCarga")List<TipoDeCarga> tiposDeCarga)
+	public Multiproposito(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="registro") String registro, @JsonProperty(value="agente")String agente
+			, @JsonProperty(value="tiposCarga")List<TipoDeCarga> tiposDeCarga, @JsonProperty(value="capacidad")Double capacidad,@JsonProperty(value="usado")Double usado)
 	{
-		super(id, nombre, registro, agente, tiposDeCarga);
+		super(id, nombre, registro, agente, tiposDeCarga, capacidad,usado);
 
 	}
 	
