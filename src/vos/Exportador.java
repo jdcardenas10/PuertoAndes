@@ -13,6 +13,12 @@ public class Exportador extends Usuario{
 	private String rut;
 	
 	/**
+	 * La naturaleza de un exportador
+	 */
+	@JsonProperty(value="naturaleza")
+	private char naturaleza;
+	
+	/**
 	 * las facturas hechas al exportador
 	 */
 	@JsonProperty(value="facturas")
@@ -34,10 +40,11 @@ public class Exportador extends Usuario{
 	 * @param facturas las facturas del exportador
 	 * @param exportadas las cargas exportadas del exportador
 	 */
-	public Exportador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave, @JsonProperty(value="rut")String rut, @JsonProperty(value="facturas")List<Factura> facturas,  @JsonProperty(value="exportadas")List<Carga> exportadas) 
+	public Exportador(@JsonProperty(value="id")int id, @JsonProperty(value="nombre")String nombre,@JsonProperty(value="login") String login, @JsonProperty(value="clave")String clave, @JsonProperty(value="rut")String rut,@JsonProperty(value="naturaleza")char naturaleza, @JsonProperty(value="facturas")List<Factura> facturas,  @JsonProperty(value="exportadas")List<Carga> exportadas) 
 	{
 		super(id,nombre,login,clave);
 		this.rut=rut;
+		this.naturaleza=naturaleza;
 		this.facturas=facturas;
 		this.exportadas=exportadas;
 	}
@@ -88,6 +95,14 @@ public class Exportador extends Usuario{
 	 */
 	public void setExportadas(List<Carga> exportadas) {
 		this.exportadas = exportadas;
+	}
+
+	public char getNaturaleza() {
+		return naturaleza;
+	}
+
+	public void setNaturaleza(char naturaleza) {
+		this.naturaleza = naturaleza;
 	}
 	
 	
