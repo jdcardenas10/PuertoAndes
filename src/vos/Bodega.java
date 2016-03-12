@@ -30,6 +30,9 @@ public class Bodega extends Area{
 	@JsonProperty(value="separacion")
 	private double separacion;
 	
+	@JsonProperty(value="tipo")
+	private TipoDeCarga tipo;
+	
 	/**
 	 * los cuartos frios de la bodega
 	 */
@@ -44,14 +47,18 @@ public class Bodega extends Area{
 	 * @param plataformaExterna si la bodega tiene plataforma externa o no
 	 * @param separacion la separacion entre las columnas
 	 */
-	public Bodega(@JsonProperty(value="id") int id,@JsonProperty(value="ancho") double ancho,@JsonProperty(value="largo") double largo,@JsonProperty(value="plataformaExterna") boolean plataformaExterna,@JsonProperty(value="separacion") double separacion, @JsonProperty(value="cuartosFrios") List<CuartoFrio> cuartosFrios)
+	public Bodega(@JsonProperty(value="id") int id,@JsonProperty(value="ancho") double ancho
+			,@JsonProperty(value="largo") double largo,@JsonProperty(value="plataformaExterna") boolean plataformaExterna
+			,@JsonProperty(value="tipo")TipoDeCarga tipo,@JsonProperty(value="separacion") double separacion
+			, @JsonProperty(value="cuartosFrios") List<CuartoFrio> cuartosFrios)
 	{
 		super(id);
 		this.ancho=ancho;
 		this.largo=largo;
 		this.plataformaExterna=plataformaExterna;
+		this.tipo=tipo;
 		this.separacion=separacion;
-		this.cuartosFrios= cuartosFrios;
+		this.setCuartosFrios(cuartosFrios);
 	}
 
 	/**
@@ -116,5 +123,21 @@ public class Bodega extends Area{
 	 */
 	public void setSeparacion(double separacion) {
 		this.separacion = separacion;
+	}
+
+	public TipoDeCarga getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoDeCarga tipo) {
+		this.tipo = tipo;
+	}
+
+	public List<CuartoFrio> getCuartosFrios() {
+		return cuartosFrios;
+	}
+
+	public void setCuartosFrios(List<CuartoFrio> cuartosFrios) {
+		this.cuartosFrios = cuartosFrios;
 	}
 }

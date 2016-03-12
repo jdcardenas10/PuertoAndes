@@ -10,8 +10,11 @@ public class Cobertizo extends Area {
 	@JsonProperty(value="dimension")
 	private double dimension;
 	
+	private TipoDeCarga tipo;
 	
-	public Cobertizo(@JsonProperty(value="id") int id, @JsonProperty(value="id") double dimensiones)
+	
+	public Cobertizo(@JsonProperty(value="id") int id, @JsonProperty(value="dimension") double dimensiones
+			, @JsonProperty(value="tipo") TipoDeCarga tipo)
 	{
 		super(id);
 		this.dimension= dimensiones;
@@ -32,6 +35,16 @@ public class Cobertizo extends Area {
 	 */
 	public void setDimension(double dimension) {
 		this.dimension = dimension;
+	}
+
+
+	public TipoDeCarga getTipo() {
+		return tipo;
+	}
+
+
+	public void setTipo(TipoDeCarga tipo) {
+		this.tipo = tipo;
 	}
 	
 	

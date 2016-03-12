@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Bodega;
+import vos.CuartoFrio;
+import vos.TipoDeCarga;
 
 
 public class DAOTablaBodegas {
@@ -60,7 +62,7 @@ public class DAOTablaBodegas {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public ArrayList<Bodega> darAreas() throws SQLException, Exception {
+	public ArrayList<Bodega> darBodegas() throws SQLException, Exception {
 		ArrayList<Bodega> areas = new ArrayList<Bodega>();
 
 		String sql = "select * from AREAS NATURAL JOIN BODEGAS";
@@ -72,8 +74,42 @@ public class DAOTablaBodegas {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
+			Double ancho=Double.parseDouble(rs.getString("ANCHO"));
+			Double largo=Double.parseDouble(rs.getString("LARGO"));
+			Boolean plataformaExterna=false;
+			if(rs.getString("PLATAFORMA_EXTERNA").equals("S")){plataformaExterna=true;}
 			
-			areas.add(new Bodega(id, id, id, false, id, null));
+			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipo=null;
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			recursos.add(prepStmt1);
+			ResultSet rs1 = prepStmt1.executeQuery();
+			while(rs1.next()){
+				int id1=Integer.parseInt(rs1.getString("ID"));
+				String nombre=rs1.getString("NOMBRE");
+				tipo=new TipoDeCarga(id1,nombre);
+			}
+			Double separacion=Double.parseDouble(rs.getString("SEPARACION"));
+			
+			String sql2="SELECT * FROM CUARTOS_FRIOS WHERE ID_BODEGA="+id;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			
+			ArrayList<CuartoFrio> cuartos=new ArrayList<CuartoFrio>();
+			while(rs2.next()){
+				int id3 = Integer.parseInt(rs.getString("ID"));
+				Double largo3=Double.parseDouble(rs.getString("LARGO"));
+				Double ancho3=Double.parseDouble(rs.getString("ANCHO"));
+				Double alto=Double.parseDouble(rs.getString("ALTO"));
+				Double areaEnFuncion=Double.parseDouble(rs.getString("AREA_EN_FUNCION"));
+				Boolean libre=true;
+				if(rs.getString("LIBRE").equals("N")){libre=false;}
+				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
+			}
+			
+			areas.add(new Bodega(id, ancho, largo, plataformaExterna, tipo,separacion, cuartos));
 		}
 		return areas;
 	}
@@ -99,8 +135,42 @@ public class DAOTablaBodegas {
 
 		while (rs.next()) {
 			int id = Integer.parseInt(rs.getString("ID"));
+			Double ancho=Double.parseDouble(rs.getString("ANCHO"));
+			Double largo=Double.parseDouble(rs.getString("LARGO"));
+			Boolean plataformaExterna=false;
+			if(rs.getString("PLATAFORMA_EXTERNA").equals("S")){plataformaExterna=true;}
 			
-			area=new Bodega(id, id, id, false, id, null);
+			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipo=null;
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			recursos.add(prepStmt1);
+			ResultSet rs1 = prepStmt1.executeQuery();
+			while(rs1.next()){
+				int id1=Integer.parseInt(rs1.getString("ID"));
+				String nombre=rs1.getString("NOMBRE");
+				tipo=new TipoDeCarga(id1,nombre);
+			}
+			Double separacion=Double.parseDouble(rs.getString("SEPARACION"));
+			
+			String sql2="SELECT * FROM CUARTOS_FRIOS WHERE ID_BODEGA="+id;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			
+			ArrayList<CuartoFrio> cuartos=new ArrayList<CuartoFrio>();
+			while(rs2.next()){
+				int id3 = Integer.parseInt(rs.getString("ID"));
+				Double largo3=Double.parseDouble(rs.getString("LARGO"));
+				Double ancho3=Double.parseDouble(rs.getString("ANCHO"));
+				Double alto=Double.parseDouble(rs.getString("ALTO"));
+				Double areaEnFuncion=Double.parseDouble(rs.getString("AREA_EN_FUNCION"));
+				Boolean libre=true;
+				if(rs.getString("LIBRE").equals("N")){libre=false;}
+				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
+			}
+			
+			area=new Bodega(id, ancho, largo, plataformaExterna, tipo,separacion, cuartos);
 		}
 
 		return area;
@@ -116,13 +186,26 @@ public class DAOTablaBodegas {
 	 */
 	public void addArea(Bodega area) throws SQLException, Exception {
 
-		String sql = "INSERT INTO AREAS VALUES (";
-		sql += area.getId() + ")";
+		String sql0="INSERT INTO AREAS VALUES("+area.getId()+")";
+		
+		String plataforma="'N'";
+		if(area.isPlataformaExterna()){plataforma="'S'";}
+		
+		String sql = "INSERT INTO BODEGAS VALUES (";
+		sql += area.getId() + ",";
+		sql += area.getAncho() + ",";
+		sql += area.getLargo() + ",";
+		sql += plataforma + ",";
+		sql += area.getTipo().getId() + ",";
+		sql += area.getSeparacion() + ")";
 		
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+		recursos.add(prepStmt0);
 		recursos.add(prepStmt);
+		prepStmt0.executeUpdate();
 		prepStmt.executeUpdate();
 
 	}
@@ -137,13 +220,25 @@ public class DAOTablaBodegas {
 	 */
 	public void deleteArea(Bodega area) throws SQLException, Exception {
 
-		String sql = "DELETE FROM AREAS";
+		String sql0 = "DELETE FROM CUARTOS_FRIOS";
+		sql0 += " WHERE ID_BODEGA = " + area.getId();
+		
+		String sql = "DELETE FROM BODEGAS";
 		sql += " WHERE id = " + area.getId();
+		
+		String sql2 = "DELETE FROM AREAS";
+		sql2 += " WHERE id = " + area.getId();
 
 		System.out.println("SQL stmt:" + sql);
 
+		PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt0);
 		recursos.add(prepStmt);
+		recursos.add(prepStmt2);
+		prepStmt0.executeUpdate();
 		prepStmt.executeUpdate();
+		prepStmt2.executeUpdate();
 	}
 }

@@ -11,11 +11,14 @@ public class Patio extends Area {
 	@JsonProperty(value="dimension")
 	private double dimension;
 	
+	private TipoDeCarga tipo;
 	
-	public Patio(@JsonProperty(value="id") int id, @JsonProperty(value="id") double dimensiones)
+	
+	public Patio(@JsonProperty(value="id") int id, @JsonProperty(value="dimension") double dimensiones,@JsonProperty(value="tipo") TipoDeCarga tipo)
 	{
 		super(id);
 		this.dimension= dimensiones;
+		this.tipo=tipo;
 	}
 
 
@@ -33,6 +36,16 @@ public class Patio extends Area {
 	 */
 	public void setDimension(double dimension) {
 		this.dimension = dimension;
+	}
+
+
+	public TipoDeCarga getTipo() {
+		return tipo;
+	}
+
+
+	public void setTipo(TipoDeCarga tipo) {
+		this.tipo = tipo;
 	}
 	
 	

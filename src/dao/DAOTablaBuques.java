@@ -126,15 +126,25 @@ public class DAOTablaBuques {
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
 	public void addBuque(Buque buque) throws SQLException, Exception {
+		
+		String sql0="select ID FROM AGENTES_MARITIMOS WHERE NOMBRE='"+buque.getAgente()+"'";
+		PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+		recursos.add(prepStmt0);
+		ResultSet rs =prepStmt0.executeQuery();
+		
+		int id=0;
+		
+		while (rs.next()) {
+			id = Integer.parseInt(rs.getString("ID"));
+		}
 
 		String sql = "INSERT INTO BUQUES VALUES (";
 		sql += buque.getId() + ",'";
 		sql += buque.getNombre() + "','";
-		sql += buque.getRegistro() + "','";
-		sql += buque.getAgente()+ "',";
+		sql += buque.getRegistro() + "',";
+		sql += id+ ",";
 		sql += buque.getCapacidad() + ",";
 		sql += buque.getUsado() + ")";
-		
 		
 		System.out.println("SQL stmt:" + sql);
 
@@ -176,7 +186,7 @@ public class DAOTablaBuques {
 	 */
 	public void deleteBuque(Buque buque) throws SQLException, Exception {
 
-		String sql = "DELETE FROM BuqueS";
+		String sql = "DELETE FROM BUQUES";
 		sql += " WHERE id = " + buque.getId();
 
 		System.out.println("SQL stmt:" + sql);
