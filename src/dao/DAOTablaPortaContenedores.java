@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import vos.RoRo;
+import vos.PortaContenedor;
 
 
-public class DAOTablaROROS {
+public class DAOTablaPortaContenedores {
 
 	/**
 	 * Arraylits de recursos que se usan para la ejecución de sentencias SQL
@@ -25,7 +25,7 @@ public class DAOTablaROROS {
 	 * Método constructor que crea DAOBuque
 	 * <b>post: </b> Crea la instancia del DAO e inicializa el Arraylist de recursos
 	 */
-	public DAOTablaROROS() {
+	public DAOTablaPortaContenedores() {
 		recursos = new ArrayList<Object>();
 	}
 
@@ -60,10 +60,10 @@ public class DAOTablaROROS {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public ArrayList<RoRo> darBuques() throws SQLException, Exception {
-		ArrayList<RoRo> buques = new ArrayList<RoRo>();
+	public ArrayList<PortaContenedor> darBuques() throws SQLException, Exception {
+		ArrayList<PortaContenedor> buques = new ArrayList<PortaContenedor>();
 
-		String sql = "select * from ROROS natural join (select B.ID,B.NOMBRE,B.REGISTRO,A.NOMBRE AS AGENTE_MARITIMO,B.CAPACIDAD,B.UTILIZADO "
+		String sql = "select * from PORTACONTENEDORES natural join (select B.ID,B.NOMBRE,B.REGISTRO,A.NOMBRE AS AGENTE_MARITIMO,B.CAPACIDAD,B.UTILIZADO "
 				+ "from BUQUES B join AGENTES_MARITIMOS A ON B.ID_AGENTE=A.ID)";
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -79,7 +79,7 @@ public class DAOTablaROROS {
 			Double capacidad=Double.parseDouble(rs.getString("CAPACIDAD"));
 			Double utilizado=Double.parseDouble(rs.getString("UTILIZADO"));
 			
-			buques.add(new RoRo(id,nombre,registro,agente,null,capacidad,utilizado));
+			buques.add(new PortaContenedor(id,nombre,registro,agente,null,capacidad,utilizado));
 		}
 		return buques;
 	}
@@ -92,10 +92,10 @@ public class DAOTablaROROS {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public RoRo buscarBuquePorID(int idn) throws SQLException, Exception {
-		RoRo buque=null;
+	public PortaContenedor buscarBuquePorID(int idn) throws SQLException, Exception {
+		PortaContenedor buque=null;
 
-		String sql = "select * from ROROS natural join (select B.ID,B.NOMBRE,B.REGISTRO,A.NOMBRE AS AGENTE_MARITIMO,B.CAPACIDAD,B.UTILIZADO "
+		String sql = "select * from PORTACONTENEDORES natural join (select B.ID,B.NOMBRE,B.REGISTRO,A.NOMBRE AS AGENTE_MARITIMO,B.CAPACIDAD,B.UTILIZADO "
 				+ "from BUQUES B join AGENTES_MARITIMOS A ON B.ID_AGENTE=A.ID WHERE B.ID ="+idn+")";
 
 		System.out.println("SQL stmt:" + sql);
@@ -112,7 +112,7 @@ public class DAOTablaROROS {
 			Double capacidad=Double.parseDouble(rs.getString("CAPACIDAD"));
 			Double utilizado=Double.parseDouble(rs.getString("UTILIZADO"));
 			
-			buque=new RoRo(id,nombre,registro,agente,null,capacidad,utilizado);
+			buque=new PortaContenedor(id,nombre,registro,agente,null,capacidad,utilizado);
 		}
 
 		return buque;
@@ -126,7 +126,7 @@ public class DAOTablaROROS {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo agregar el Buque a la base de datos
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void addBuque(RoRo buque) throws SQLException, Exception {
+	public void addBuque(PortaContenedor buque) throws SQLException, Exception {
 
 		String sql = "INSERT INTO BUQUES VALUES (";
 		sql += buque.getId() + ",'";
@@ -136,7 +136,7 @@ public class DAOTablaROROS {
 		sql += buque.getCapacidad() + ",";
 		sql += buque.getUsado() + ")";
 		
-		String sql2 = "INSERT INTO ROROS VALUES (";
+		String sql2 = "INSERT INTO PORTACONTENEDORES VALUES (";
 		sql2+= buque.getId() + ")";
 		
 		
@@ -159,7 +159,7 @@ public class DAOTablaROROS {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo actualizar el Buque.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void updateBuque(RoRo buque) throws SQLException, Exception {
+	public void updateBuque(PortaContenedor buque) throws SQLException, Exception {
 
 		String sql = "UPDATE BUQUES SET ";
 		sql += "capacidad=" + buque.getCapacidad() + ", ";
@@ -181,9 +181,9 @@ public class DAOTablaROROS {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo actualizar el Buque.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void deleteBuque(RoRo buque) throws SQLException, Exception {
+	public void deleteBuque(PortaContenedor buque) throws SQLException, Exception {
 
-		String sql = "DELETE FROM ROROS";
+		String sql = "DELETE FROM PORTACONTENEDORES";
 		sql += " WHERE id = " + buque.getId();
 		
 		String sql2 = "DELETE FROM BUQUES";

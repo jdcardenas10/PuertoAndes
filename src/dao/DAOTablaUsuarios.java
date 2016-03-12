@@ -88,7 +88,7 @@ public class DAOTablaUsuarios {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public Usuario buscarUsuariosPorID(int idn) throws SQLException, Exception {
+	public Usuario buscarUsuarioPorID(int idn) throws SQLException, Exception {
 	    Usuario usuario=null;
 
 		String sql = "SELECT * from USUARIOS WHERE ID ="+idn;

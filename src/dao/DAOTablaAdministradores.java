@@ -64,7 +64,7 @@ public class DAOTablaAdministradores {
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
 	public ArrayList<Administrador> darAdministradores() throws SQLException, Exception {
-		ArrayList<Administrador> Administradores = new ArrayList<Administrador>();
+		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
 
 		String sql = "select * from ADMINISTRADORES NATURAL JOIN USUARIOS";
 
@@ -78,9 +78,9 @@ public class DAOTablaAdministradores {
 			String nombre = rs.getString("NOMBRE");
 			String login = rs.getString("LOGIN");
 			String clave = rs.getString("CLAVE");
-			Administradores.add(new Administrador(id, nombre, login,clave));
+			administradores.add(new Administrador(id, nombre, login,clave));
 		}
-		return Administradores;
+		return administradores;
 	}
 
 
@@ -91,8 +91,8 @@ public class DAOTablaAdministradores {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public ArrayList<Administrador> buscarAdministradoresPorID(int idn) throws SQLException, Exception {
-		ArrayList<Administrador> administradores = new ArrayList<Administrador>();
+	public Administrador buscarAdministradoresPorID(int idn) throws SQLException, Exception {
+		Administrador administrador = null;
 
 		String sql = "SELECT * from ADMINISTRADORES NATURAL JOIN USUARIOS WHERE ID ="+idn;
 
@@ -107,10 +107,10 @@ public class DAOTablaAdministradores {
 			String nombre = rs.getString("NOMBRE");
 			String login = rs.getString("LOGIN");
 			String clave = rs.getString("CLAVE");
-			administradores.add(new Administrador(id, nombre, login,clave));
+			administrador=new Administrador(id, nombre, login,clave);
 		}
 
-		return administradores;
+		return administrador;
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class DAOTablaAdministradores {
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 		recursos.add(prepStmt);
 		recursos.add(prepStmt2);
-		prepStmt.executeQuery();
-		prepStmt2.executeQuery();
+		prepStmt.executeUpdate();
+		prepStmt2.executeUpdate();
 
 	}
 	
@@ -150,19 +150,19 @@ public class DAOTablaAdministradores {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo actualizar el Administrador.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void updateAdministrador(Administrador Administrador) throws SQLException, Exception {
+	public void updateAdministrador(Administrador administrador) throws SQLException, Exception {
 
 		String sql = "UPDATE USUARIOS SET ";
-		sql += "nombre='" + Administrador.getNombre() + "', ";
-		sql += "login='" + Administrador.getLogin()+"', ";
-		sql += "clave='" + Administrador.getClave()+"'";
-		sql += " WHERE id = " + Administrador.getId();
+		sql += "nombre='" + administrador.getNombre() + "', ";
+		sql += "login='" + administrador.getLogin()+"', ";
+		sql += "clave='" + administrador.getClave()+"'";
+		sql += " WHERE id = " + administrador.getId();
 
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+		prepStmt.executeUpdate();
 	}
 
 	/**
@@ -173,15 +173,15 @@ public class DAOTablaAdministradores {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo actualizar el Administrador.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void deleteAdministrador(Administrador Administrador) throws SQLException, Exception {
+	public void deleteAdministrador(Administrador administrador) throws SQLException, Exception {
 
 		String sql = "DELETE FROM Administradores";
-		sql += " WHERE id = " + Administrador.getId();
+		sql += " WHERE id = " + administrador.getId();
 
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+		prepStmt.executeUpdate();
 	}
 }
