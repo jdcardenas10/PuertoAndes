@@ -9,6 +9,8 @@ import java.util.Date;
 
 import vos.Carga;
 import vos.Entrega;
+import vos.Factura;
+import vos.Importador;
 import vos.TipoDeCarga;
 
 public class DAOTablaEntregas {
@@ -104,11 +106,11 @@ public class DAOTablaEntregas {
 		return entregas;	
 	}
 
-	public void addEntrega(Entrega entrega) throws SQLException, Exception {
+	public void addEntrega(Entrega entrega, Importador importador, Factura factura) throws SQLException, Exception {
 
 		String sql = "INSERT INTO OPERACIONES VALUES (";
 		sql += entrega.getId() + ",'";
-		//sql += entrega.getFactura() + "','";
+		sql += factura.getId() + "','";
 		sql += entrega.getTipo() + "','";
 		sql += entrega.getFecha() +"')";
 		sql += entrega.getCarga().getId() +"')";
@@ -116,7 +118,7 @@ public class DAOTablaEntregas {
 		//TODO
 		String sql2="INSERT INTO ENTREGAS VALUES ("
 				+entrega.getId()+",'"
-		        +entrega.getId()+"')";
+		        +importador.getId()+"')";
 		
 
 		System.out.println("SQL stmt:" + sql);
@@ -128,5 +130,17 @@ public class DAOTablaEntregas {
 		prepStmt.executeUpdate();
 		prepStmt2.executeUpdate();
 
+	}
+	
+	public void deleteEntrega(Entrega entrega) throws SQLException, Exception {
+
+		String sql = "DELETE FROM VIDEOS";
+		sql += " WHERE id = " + entrega.getId();
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		prepStmt.executeQuery();
 	}
 }

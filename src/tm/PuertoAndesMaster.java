@@ -106,6 +106,11 @@ public class PuertoAndesMaster {
 		
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Administrador> darAdministradores() throws Exception  {
 		ArrayList<Administrador> admins;
 		DAOTablaAdministradores dao=new DAOTablaAdministradores();
@@ -139,6 +144,11 @@ public class PuertoAndesMaster {
 		return admins;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Importador> darImportadores() throws Exception {
 		ArrayList<Importador> importadores;
 		DAOTablaImportadores dao=new DAOTablaImportadores();
@@ -172,6 +182,11 @@ public class PuertoAndesMaster {
 		return importadores;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Entrega> darEntregas() throws Exception {
 		ArrayList<Entrega> entregas;
 		DAOTablaEntregas dao=new DAOTablaEntregas();
@@ -203,6 +218,44 @@ public class PuertoAndesMaster {
 			}
 		}
 		return entregas;
+	}
+
+	/**
+	 * 
+	 * @param entrega
+	 * @throws Exception
+	 */
+	public void addEntrega(Entrega entrega, Importador importador) throws Exception {
+		
+		DAOTablaEntregas daoEntregas = new DAOTablaEntregas();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoEntregas.setConn(conn);
+			daoEntregas.addEntrega(entrega,importador,null);
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEntregas.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		
 	}
 
 	
