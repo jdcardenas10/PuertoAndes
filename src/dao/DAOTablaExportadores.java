@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import vos.Carga;
-import vos.Entrega;
 import vos.Exportador;
 import vos.Factura;
-import vos.Importador;
 import vos.Operacion;
 import vos.TipoDeCarga;
 
