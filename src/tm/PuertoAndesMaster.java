@@ -11,9 +11,11 @@ import java.util.Properties;
 
 import dao.DAOTablaAdministradores;
 import dao.DAOTablaEntregas;
+import dao.DAOTablaExportadores;
 import dao.DAOTablaImportadores;
 import vos.Administrador;
 import vos.Entrega;
+import vos.Exportador;
 import vos.Importador;
 
 
@@ -256,6 +258,44 @@ public class PuertoAndesMaster {
 			}
 		}
 		
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Exportador> darExportadores() throws Exception {
+		ArrayList<Exportador> exportadores;
+		DAOTablaExportadores dao=new DAOTablaExportadores();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			exportadores = dao.darExportadores();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return exportadores;
 	}
 
 	
