@@ -115,10 +115,10 @@ public class DAOTablaImportadores {
 			ResultSet rs3 = prepStmt.executeQuery();
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
 			while(rs3.next()){
-				int id1 =Integer.parseInt(rs1.getString("ID"));
-				char tipo=rs1.getString("TIPO").charAt(0);
-				Date fecha=new Date(rs1.getString("FECHA"));
-				int idCarga=Integer.parseInt(rs1.getString("ID_CARGA"));
+				int id1 =Integer.parseInt(rs3.getString("ID"));
+				char tipo=rs3.getString("TIPO").charAt(0);
+				Date fecha=new Date(rs3.getString("FECHA"));
+				int idCarga=Integer.parseInt(rs3.getString("ID_CARGA"));
 				
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
@@ -128,10 +128,21 @@ public class DAOTablaImportadores {
 				
 				String nombre2=rs2.getString("NOMBRE");
 				Double peso=Double.parseDouble(rs2.getString("PESO"));
-				char estado2=rs2.getString("NOMBRE").charAt(0);
+				char estado2=rs2.getString("ESTADO").charAt(0);
 				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
 				
-				carga=new Carga(id,nombre2,peso,estado2,dias2,null);
+				String sql4 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+	            PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+				recursos.add(prepStmt4);
+				ResultSet rs4 = prepStmt4.executeQuery();
+				TipoDeCarga tipo4=null;
+				
+				String nombre4=rs4.getString("NOMBRE");
+				
+				tipo4=new TipoDeCarga(tipoCarga,nombre4);
+				
+				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo4);
 				
 				entregas.add(new Entrega(id1,tipo,fecha,carga));
 				
@@ -201,10 +212,10 @@ public class DAOTablaImportadores {
 			ResultSet rs3 = prepStmt.executeQuery();
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
 			while(rs3.next()){
-				int id1 =Integer.parseInt(rs1.getString("ID"));
-				char tipo=rs1.getString("TIPO").charAt(0);
-				Date fecha=new Date(rs1.getString("FECHA"));
-				int idCarga=Integer.parseInt(rs1.getString("ID_CARGA"));
+				int id1 =Integer.parseInt(rs3.getString("ID"));
+				char tipo=rs3.getString("TIPO").charAt(0);
+				Date fecha=new Date(rs3.getString("FECHA"));
+				int idCarga=Integer.parseInt(rs3.getString("ID_CARGA"));
 				
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
@@ -236,7 +247,7 @@ public class DAOTablaImportadores {
 	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo agregar el Agente a la base de datos
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public void addAgente(Importador importador) throws SQLException, Exception {
+	public void addImportador(Importador importador) throws SQLException, Exception {
 
 		String sql = "INSERT INTO Usuarios VALUES (";
 		sql += importador.getId() + ",'";
