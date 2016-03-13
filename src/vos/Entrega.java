@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Entrega extends Operacion{
 
+	
 	/**
 	 * metodo constructor de la clase entrega
 	 * @param id el id de la operacion
@@ -17,5 +18,4 @@ public class Entrega extends Operacion{
 		super(id, tipo, fecha, carga);
 	}
 	
-
 }

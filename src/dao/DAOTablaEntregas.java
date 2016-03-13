@@ -9,8 +9,6 @@ import java.util.Date;
 
 import vos.Carga;
 import vos.Entrega;
-import vos.Exportador;
-import vos.Importador;
 import vos.TipoDeCarga;
 
 public class DAOTablaEntregas {
@@ -106,7 +104,7 @@ public class DAOTablaEntregas {
 		return entregas;	
 	}
 
-	public void addImportador(Entrega entrega) throws SQLException, Exception {
+	public void addEntrega(Entrega entrega) throws SQLException, Exception {
 
 		String sql = "INSERT INTO OPERACIONES VALUES (";
 		sql += entrega.getId() + ",'";
@@ -115,6 +113,7 @@ public class DAOTablaEntregas {
 		sql += entrega.getFecha() +"')";
 		sql += entrega.getCarga().getId() +"')";
 		
+		//TODO
 		String sql2="INSERT INTO ENTREGAS VALUES ("
 				+entrega.getId()+",'"
 		        +entrega.getId()+"')";
