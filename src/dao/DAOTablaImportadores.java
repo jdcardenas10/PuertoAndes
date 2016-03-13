@@ -86,7 +86,7 @@ public class DAOTablaImportadores {
 			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
-			ResultSet rs1 = prepStmt.executeQuery();
+			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
 			while(rs1.next()){
 				int id1 =Integer.parseInt(rs1.getString("ID"));
@@ -99,7 +99,7 @@ public class DAOTablaImportadores {
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
@@ -112,7 +112,7 @@ public class DAOTablaImportadores {
 			String sql3 = "select * from ENTREGAS NATURAL JOIN OPERACIONES WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt.executeQuery();
+			ResultSet rs3 = prepStmt3.executeQuery();
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
 			while(rs3.next()){
 				int id1 =Integer.parseInt(rs3.getString("ID"));
@@ -123,7 +123,7 @@ public class DAOTablaImportadores {
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				Carga carga=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
@@ -183,7 +183,7 @@ public class DAOTablaImportadores {
 			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
-			ResultSet rs1 = prepStmt.executeQuery();
+			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
 			while(rs1.next()){
 				int id1 =Integer.parseInt(rs1.getString("ID"));
@@ -196,7 +196,7 @@ public class DAOTablaImportadores {
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
@@ -209,7 +209,7 @@ public class DAOTablaImportadores {
 			String sql3 = "select * from ENTREGAS NATURAL JOIN OPERACIONES WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt.executeQuery();
+			ResultSet rs3 = prepStmt3.executeQuery();
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
 			while(rs3.next()){
 				int id1 =Integer.parseInt(rs3.getString("ID"));
@@ -220,7 +220,7 @@ public class DAOTablaImportadores {
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				Carga carga=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
