@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Properties;
 
 import dao.DAOTablaAdministradores;
+import dao.DAOTablaImportadores;
 import vos.Administrador;
+import vos.Importador;
 
 
 public class PuertoAndesMaster {
@@ -133,6 +135,39 @@ public class PuertoAndesMaster {
 			}
 		}
 		return admins;
+	}
+
+	public List<Importador> darImportadores() throws Exception {
+		ArrayList<Importador> importadores;
+		DAOTablaImportadores dao=new DAOTablaImportadores();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			importadores = dao.darImportadores();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return importadores;
 	}
 
 	
