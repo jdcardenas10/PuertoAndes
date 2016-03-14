@@ -93,7 +93,7 @@ public class DAOTablaImportadores {
 				String nombre1=rs1.getString("NOMBRE");
 				Double peso=Double.parseDouble(rs1.getString("PESO"));
 				int dias=Integer.parseInt(rs1.getString("DIAS_EN_PUERTO"));
-				char estado=rs1.getString(rs1.getString("ESTADO")).charAt(0);
+				char estado=rs1.getString("ESTADO").charAt(0);
 				int tipoCarga=Integer.parseInt(rs1.getString("ID_TIPO_CARGA"));
 				
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
@@ -101,14 +101,16 @@ public class DAOTablaImportadores {
 				recursos.add(prepStmt2);
 				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
-				
-				String nombre2=rs2.getString("NOMBRE");
+				String nombre2=null;
+				while(rs2.next())
+				{nombre2=rs2.getString("NOMBRE");}
 				
 				tipo=new TipoDeCarga(tipoCarga,nombre2);
 				
 				cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
 				
 			}
+			prepStmt1.close();
 			String sql3 = "select * from ENTREGAS NATURAL JOIN OPERACIONES WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
@@ -137,8 +139,9 @@ public class DAOTablaImportadores {
 				recursos.add(prepStmt4);
 				ResultSet rs4 = prepStmt4.executeQuery();
 				TipoDeCarga tipo4=null;
-				
-				String nombre4=rs4.getString("NOMBRE");
+				String nombre4=null;
+				while(rs4.next()){
+				nombre4=rs4.getString("NOMBRE");}
 				
 				tipo4=new TipoDeCarga(tipoCarga,nombre4);
 				
@@ -147,8 +150,10 @@ public class DAOTablaImportadores {
 				entregas.add(new Entrega(id1,tipo,fecha,carga));
 				
 			}
+			prepStmt3.close();
 			importadores.add(new Importador(id, nombre, login,clave,tipo0, registro, entregas,cargas));
 		}
+		prepStmt.close();
 		return importadores;
 	}
 
