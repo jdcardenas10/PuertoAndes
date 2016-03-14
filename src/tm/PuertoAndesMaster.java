@@ -17,6 +17,7 @@ import vos.Administrador;
 import vos.Entrega;
 import vos.Exportador;
 import vos.Importador;
+import vos.ListaArribosSalidas;
 
 
 public class PuertoAndesMaster {
@@ -296,6 +297,11 @@ public class PuertoAndesMaster {
 			}
 		}
 		return exportadores;
+	}
+
+	public ListaArribosSalidas darArribosYSalidas() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
