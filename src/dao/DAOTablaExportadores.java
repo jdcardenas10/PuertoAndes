@@ -82,12 +82,14 @@ public class DAOTablaExportadores {
 			String rut = rs.getString("RUT");
 			char naturaleza = rs.getString("NATURALEZA").charAt(0);
 			
-			String sql1 = "select * from CARGAS WHERE ID_EXPORTADOR="+id;
+			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
-			ResultSet rs1 = prepStmt.executeQuery();
+			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
+			
 			while(rs1.next()){
+				
 				int id1 =Integer.parseInt(rs1.getString("ID"));
 				String nombre1=rs1.getString("NOMBRE");
 				Double peso=Double.parseDouble(rs1.getString("PESO"));
@@ -98,7 +100,7 @@ public class DAOTablaExportadores {
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
@@ -106,12 +108,13 @@ public class DAOTablaExportadores {
 				tipo=new TipoDeCarga(tipoCarga,nombre2);
 				
 				cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
+				
 			}
-			
+	
 			String sql3 = "select * from FACTURAS WHERE ID_EXPORTADOR="+id;
             PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt.executeQuery();
+			ResultSet rs3 = prepStmt3.executeQuery();
 			ArrayList<Factura> facturas=new ArrayList<Factura>();
 			while(rs3.next()){
 				
@@ -122,7 +125,7 @@ public class DAOTablaExportadores {
 				String sql2 = "select * from OPERACIONES WHERE ID_FACTURA="+id1;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				ResultSet rs2 = prepStmt2.executeQuery();
 				ArrayList<Operacion> operaciones=new ArrayList<Operacion>();
 				while(rs2.next()){
 					
@@ -134,12 +137,12 @@ public class DAOTablaExportadores {
 					String sql4 = "select * from CARGAS WHERE ID="+idCarga;
 		            PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
 					recursos.add(prepStmt4);
-					ResultSet rs4 = prepStmt.executeQuery();
+					ResultSet rs4 = prepStmt4.executeQuery();
 					Carga carga=null;
 					
 					String nombre2=rs4.getString("NOMBRE");
 					Double peso=Double.parseDouble(rs4.getString("PESO"));
-					char estado2=rs4.getString("NOMBRE").charAt(0);
+					char estado2=rs4.getString("ESTADO").charAt(0);
 					int dias2=Integer.parseInt(rs4.getString("DIAS_EN_PUERTO"));
 					
 					carga=new Carga(id,nombre2,peso,estado2,dias2,null);
