@@ -304,5 +304,37 @@ public class PuertoAndesMaster {
 		return null;
 	}
 
+	public List<Exportador> buscarExportadorPor(String name) throws Exception {
+		ArrayList<Exportador> exportadores;
+		DAOTablaExportadores dao = new DAOTablaExportadores();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			exportadores = dao.buscarExportadorPor(name);
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return exportadores;
+	}
+
 	
 }

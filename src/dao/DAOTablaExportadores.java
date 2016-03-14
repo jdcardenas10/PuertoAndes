@@ -357,4 +357,9 @@ public class DAOTablaExportadores {
 		prepStmt0.executeUpdate();
 		prepStmt.executeUpdate();
 	}
+
+	public ArrayList<Exportador> buscarExportadorPor(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
