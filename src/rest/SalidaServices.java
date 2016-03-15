@@ -1,7 +1,10 @@
 package rest;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -9,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import tm.PuertoAndesMaster;
 import vos.ListaArribosSalidas;
+import vos.Salida;
 
 
 public class SalidaServices {
@@ -50,5 +54,25 @@ public class SalidaServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).entity(lista).build();
+	}
+	
+	/**
+     * Método que expone servicio REST usando PUT que agrega los videos que recibe en Json
+     * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos/videos
+     * @param videos - videos a agregar. 
+     * @return Json con el video que agrego o Json con el error que se produjo
+     */
+	@PUT
+	@Path("/agregar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addVideo(Salida salida) {
+		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+		try {
+			tm.addSalida(salida);
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(salida).build();
 	}
 }
