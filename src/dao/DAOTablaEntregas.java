@@ -63,8 +63,8 @@ public class DAOTablaEntregas {
 	 */
 	@SuppressWarnings("deprecation")
 	public ArrayList<Entrega> darEntregas() throws Exception {
-		
 		ArrayList<Entrega> entregas = new ArrayList<Entrega>();
+		
 		String sql = "select * from ENTREGAS NATURAL JOIN OPERACIONES";
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
@@ -80,7 +80,7 @@ public class DAOTablaEntregas {
 			String sql2 = "select * from CARGAS WHERE ID="+idCarga;
             PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt.executeQuery();
+			ResultSet rs2 = prepStmt2.executeQuery();
 			Carga carga=null;
 			
 			String nombre2=rs2.getString("NOMBRE");
