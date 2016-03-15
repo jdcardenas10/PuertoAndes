@@ -124,7 +124,7 @@ public class DAOTablaExportadores {
 				
 				int id1 =Integer.parseInt(rs3.getString("ID"));
 				float valorTotal= Float.parseFloat(rs3.getString("VALOR_TOTAL"));
-				Date fecha=new Date(rs3.getString("FECHA"));
+				//Date fecha=new Date(rs3.getString("FECHA"));
 				
 				String sql2 = "select * from OPERACIONES WHERE ID_FACTURA="+id1;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
@@ -135,28 +135,28 @@ public class DAOTablaExportadores {
 					
 					int id2 =Integer.parseInt(rs2.getString("ID"));
 					char tipo2=rs2.getString("TIPO").charAt(0);
-					Date fecha1=new Date(rs2.getString("FECHA"));
-					int idCarga=Integer.parseInt(rs2.getString("ID_CARGA"));
+					//Date fecha1=new Date(rs2.getString("FECHA"));
+					String idCarga=rs2.getString("ID_CARGA");
 					
 					String sql4 = "select * from CARGAS WHERE ID="+idCarga;
 		            PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
 					//recursos.add(prepStmt4);
 					ResultSet rs4 = prepStmt4.executeQuery();
 					Carga carga=null;
-					
+					while(rs4.next()){
 					String nombre2=rs4.getString("NOMBRE");
 					Double peso=Double.parseDouble(rs4.getString("PESO"));
 					char estado2=rs4.getString("ESTADO").charAt(0);
 					int dias2=Integer.parseInt(rs4.getString("DIAS_EN_PUERTO"));
 					
 					carga=new Carga(id,nombre2,peso,estado2,dias2,null);
-					
-					operaciones.add(new Operacion(id2,tipo2,fecha1,carga));
+					}
+					operaciones.add(new Operacion(id2,tipo2,null,carga));
 				}
 				rs2.close();
-				prepStmt.close();
+				prepStmt2.close();
 				
-				facturas.add(new Factura(id1,valorTotal,fecha,operaciones));
+				facturas.add(new Factura(id1,valorTotal,null,operaciones));
 			}
 			rs3.close();
 			prepStmt3.close();
@@ -188,6 +188,7 @@ public class DAOTablaExportadores {
 		ResultSet rs = prepStmt.executeQuery();
 
 		while (rs.next()) {
+
 			int id = Integer.parseInt(rs.getString("ID"));
 			String nombre = rs.getString("NOMBRE");
 			String login = rs.getString("LOGIN");
@@ -195,12 +196,14 @@ public class DAOTablaExportadores {
 			String rut = rs.getString("RUT");
 			char naturaleza = rs.getString("NATURALEZA").charAt(0);
 			
-			String sql1 = "select * from CARGAS WHERE ID_EXPORTADOR="+id;
+			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
             PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
-			recursos.add(prepStmt1);
-			ResultSet rs1 = prepStmt.executeQuery();
+			//recursos.add(prepStmt1);
+			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
+			
 			while(rs1.next()){
+				
 				int id1 =Integer.parseInt(rs1.getString("ID"));
 				String nombre1=rs1.getString("NOMBRE");
 				Double peso=Double.parseDouble(rs1.getString("PESO"));
@@ -210,60 +213,71 @@ public class DAOTablaExportadores {
 				
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				//recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
 				
 				String nombre2=rs2.getString("NOMBRE");
+				rs2.close();
+				prepStmt2.close();
 				
 				tipo=new TipoDeCarga(tipoCarga,nombre2);
 				
 				cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
 				
 			}
+			rs1.close();
+			prepStmt1.close();
+	
 			String sql3 = "select * from FACTURAS WHERE ID_EXPORTADOR="+id;
             PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt.executeQuery();
+			//recursos.add(prepStmt3);
+			ResultSet rs3 = prepStmt3.executeQuery();
 			ArrayList<Factura> facturas=new ArrayList<Factura>();
 			while(rs3.next()){
 				
 				int id1 =Integer.parseInt(rs3.getString("ID"));
 				float valorTotal= Float.parseFloat(rs3.getString("VALOR_TOTAL"));
-				Date fecha=new Date(rs3.getString("FECHA"));
+				//Date fecha=new Date(rs3.getString("FECHA"));
 				
 				String sql2 = "select * from OPERACIONES WHERE ID_FACTURA="+id1;
 	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-				recursos.add(prepStmt2);
-				ResultSet rs2 = prepStmt.executeQuery();
+				//recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
 				ArrayList<Operacion> operaciones=new ArrayList<Operacion>();
 				while(rs2.next()){
 					
 					int id2 =Integer.parseInt(rs2.getString("ID"));
 					char tipo2=rs2.getString("TIPO").charAt(0);
-					Date fecha1=new Date(rs2.getString("FECHA"));
-					int idCarga=Integer.parseInt(rs2.getString("ID_CARGA"));
+					//Date fecha1=new Date(rs2.getString("FECHA"));
+					String idCarga=rs2.getString("ID_CARGA");
 					
 					String sql4 = "select * from CARGAS WHERE ID="+idCarga;
 		            PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
-					recursos.add(prepStmt4);
-					ResultSet rs4 = prepStmt.executeQuery();
+					//recursos.add(prepStmt4);
+					ResultSet rs4 = prepStmt4.executeQuery();
 					Carga carga=null;
-					
+					while(rs4.next()){
 					String nombre2=rs4.getString("NOMBRE");
 					Double peso=Double.parseDouble(rs4.getString("PESO"));
 					char estado2=rs4.getString("ESTADO").charAt(0);
 					int dias2=Integer.parseInt(rs4.getString("DIAS_EN_PUERTO"));
 					
 					carga=new Carga(id,nombre2,peso,estado2,dias2,null);
-					
-					operaciones.add(new Operacion(id2,tipo2,fecha1,carga));
+					}
+					operaciones.add(new Operacion(id2,tipo2,null,carga));
 				}
+				rs2.close();
+				prepStmt2.close();
 				
-				facturas.add(new Factura(id1,valorTotal,fecha,operaciones));
+				facturas.add(new Factura(id1,valorTotal,null,operaciones));
 			}
-			exportador=new Exportador(id, nombre, login,clave,rut, naturaleza,facturas,cargas);
+			rs3.close();
+			prepStmt3.close();
+			exportador=new Exportador(id, nombre, login,clave,rut,naturaleza, facturas,cargas);
 		}
+		rs.close();
+		prepStmt.close();
 
 		return exportador;
 	}
