@@ -66,15 +66,14 @@ public class EntregaServices {
      */
 	@PUT
 	@Path("/entrega/{idCarga}/{idTipoCarga}/{peso}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addEntrega(@javax.ws.rs.PathParam("idCarga") int idCarga,@javax.ws.rs.PathParam("idTipoCarga")  int idTipoCarga, @javax.ws.rs.PathParam("peso") double peso) {
+	public void addEntrega(@javax.ws.rs.PathParam("idCarga") int idCarga,@javax.ws.rs.PathParam("idTipoCarga")  int idTipoCarga, @javax.ws.rs.PathParam("peso") double peso) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+		Entrega s;
 		try {
 			tm.addEntrega(idCarga, idTipoCarga,peso);
 		} catch (Exception e) {
-			return Response.status(500).entity(doErrorMessage(e)).build();
+			//return Response.status(500).entity(doErrorMessage(e)).build();
 		}
-		//return Response.status(200).entity(entrega).build();
-		return null;
+		//return Response.status(200).entity().build();
 	}
 }
