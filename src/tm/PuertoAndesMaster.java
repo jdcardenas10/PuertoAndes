@@ -12,10 +12,12 @@ import java.util.Properties;
 import dao.DAOTablaAdministradores;
 import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
+import dao.DAOTablaFacturas;
 import dao.DAOTablaImportadores;
 import vos.Administrador;
 import vos.Entrega;
 import vos.Exportador;
+import vos.Factura;
 import vos.Importador;
 import vos.ListaArribosSalidas;
 import vos.Salida;
@@ -378,6 +380,39 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
+	}
+
+	public List<Factura> darFacturas() throws Exception{
+		ArrayList<Factura> facturas;
+		DAOTablaFacturas dao=new DAOTablaFacturas();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			facturas = dao.darFacturas();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return facturas;
 	}
 	
 }
