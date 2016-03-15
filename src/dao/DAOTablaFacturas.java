@@ -123,6 +123,12 @@ public class DAOTablaFacturas {
 		}
 		return facturas;
 	}
+
+
+	public void addEntrega(int idBuque) {
+		
+		
+	}
 	
 	
 

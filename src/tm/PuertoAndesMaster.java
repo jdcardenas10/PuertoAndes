@@ -414,5 +414,39 @@ public class PuertoAndesMaster {
 		}
 		return facturas;
 	}
+
+	public void addFactura(int idBuque) throws Exception {
+		
+		DAOTablaFacturas daoFacturas = new DAOTablaFacturas();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			daoFacturas.setConn(conn);
+			daoFacturas.addEntrega(idBuque);
+			conn.commit();
+			System.out.println("a");
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoFacturas.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		
+	}
 	
 }
