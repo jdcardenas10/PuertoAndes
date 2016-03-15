@@ -64,74 +64,78 @@ public class DAOTablaEntregas {
 	@SuppressWarnings("deprecation")
 	public ArrayList<Entrega> darEntregas() throws Exception {
 		ArrayList<Entrega> entregas = new ArrayList<Entrega>();
-		
+
 		String sql = "select * from ENTREGAS NATURAL JOIN OPERACIONES";
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		
+
 		while (rs.next()){
-			
+
 			int id = Integer.parseInt(rs.getString("ID"));
 			char tipo = rs.getString("TIPO").charAt(0);
-			Date fecha=new Date(rs.getString("FECHA"));
+			Date fecha=null;
 			int idCarga=Integer.parseInt(rs.getString("ID_CARGA"));
-			
+
 			String sql2 = "select * from CARGAS WHERE ID="+idCarga;
-            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
 			ResultSet rs2 = prepStmt2.executeQuery();
 			Carga carga=null;
-			
-			String nombre2=rs2.getString("NOMBRE");
-			Double peso=Double.parseDouble(rs2.getString("PESO"));
-			char estado2=rs2.getString("ESTADO").charAt(0);
-			int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
-			int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
-			
-			String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-            PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt3.executeQuery();
-			TipoDeCarga tipo2=null;
-			
-			String nombre4=rs3.getString("NOMBRE");
-			
-			tipo2=new TipoDeCarga(tipoCarga,nombre4);
-			
-			carga=new Carga(id,nombre2,peso,estado2,dias2,tipo2);
-			
+
+			while (rs2.next())
+			{
+				String nombre2=rs2.getString("NOMBRE");
+				Double peso=Double.parseDouble(rs2.getString("PESO"));
+				char estado2=rs2.getString("ESTADO").charAt(0);
+				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
+
+				String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				ResultSet rs3 = prepStmt3.executeQuery();
+				TipoDeCarga tipo2=null;
+				while(rs3.next())
+				{
+
+					String nombre4=rs3.getString("NOMBRE");
+
+					tipo2=new TipoDeCarga(tipoCarga,nombre4);
+				}
+
+				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo2);
+			}
 			entregas.add(new Entrega(id,tipo,fecha,carga));
 		}
 		return entregas;	
 	}
 
-	public void addEntrega(Entrega entrega, int idImportador,int factura) throws SQLException, Exception {
+	public void addEntrega(int idEntrega, int idCarga, int idImportador,int factura) throws SQLException, Exception {
 
-		String sql = "INSERT INTO OPERACIONES VALUES (";
-		sql += entrega.getId() + ",'";
+		/*String sql = "INSERT INTO OPERACIONES VALUES (";
+		sql += idEntrega + ",'";
 		sql += factura + "','";
-		sql += entrega.getTipo() + "','";
-		sql += entrega.getFecha() +"')";
-		sql += entrega.getCarga().getId() +"')";
+		sql +=  "E','";
+		sql +=  "')";
 		
-		//TODO
+		sql += idCarga +"')";*/
 		String sql2="INSERT INTO ENTREGAS VALUES ("
-				+entrega.getId()+",'"
-		        +idImportador+"')";
-		
+				+idEntrega+",'"
+				+idImportador+"')";
 
-		System.out.println("SQL stmt:" + sql);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		//System.out.println("SQL stmt:" + sql);
+
+		//PreparedStatement prepStmt = conn.prepareStatement(sql);
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt);
+		//recursos.add(prepStmt);
 		recursos.add(prepStmt2);
-		prepStmt.executeUpdate();
+		//prepStmt.executeUpdate();
 		prepStmt2.executeUpdate();
 
 	}
-	
+
 	public void deleteEntrega(Entrega entrega) throws SQLException, Exception {
 
 		String sql = "DELETE FROM VIDEOS";

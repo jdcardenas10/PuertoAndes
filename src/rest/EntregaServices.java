@@ -65,16 +65,16 @@ public class EntregaServices {
      * @return Json con el video que agrego o Json con el error que se produjo
      */
 	@PUT
-	@Path("/entrega")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/entrega/{idEntrega}/{idCarga}/{idImportador}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addEntrega(Entrega entrega, int i) {
+	public Response addEntrega(@javax.ws.rs.PathParam("idEntrega") int idEntrega,@javax.ws.rs.PathParam("idCarga")  int idCarga, @javax.ws.rs.PathParam("idImportador") int importador) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		try {
-			tm.addEntrega(entrega,i);
+			tm.addEntrega(idEntrega, idCarga,importador);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
-		return Response.status(200).entity(entrega).build();
+		//return Response.status(200).entity(entrega).build();
+		return null;
 	}
 }

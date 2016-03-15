@@ -75,16 +75,16 @@ public class DAOTablaImportadores {
 		ResultSet rs = prepStmt.executeQuery();
 
 		while (rs.next()) {
-			
+
 			int id = Integer.parseInt(rs.getString("ID"));
 			String nombre = rs.getString("NOMBRE");
 			String login = rs.getString("LOGIN");
 			String clave = rs.getString("CLAVE");
 			String registro = rs.getString("REGISTRO_ADUANA");
 			char tipo0 = rs.getString("TIPO").charAt(0);
-			
+
 			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
-            PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
@@ -95,60 +95,64 @@ public class DAOTablaImportadores {
 				int dias=Integer.parseInt(rs1.getString("DIAS_EN_PUERTO"));
 				char estado=rs1.getString("ESTADO").charAt(0);
 				int tipoCarga=Integer.parseInt(rs1.getString("ID_TIPO_CARGA"));
-				
+
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
 				String nombre2=null;
 				while(rs2.next())
 				{nombre2=rs2.getString("NOMBRE");}
-				
+
 				tipo=new TipoDeCarga(tipoCarga,nombre2);
-				
+
 				cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
-				
+
 			}
 			prepStmt1.close();
 			String sql3 = "select * from ENTREGAS NATURAL JOIN OPERACIONES WHERE ID_IMPORTADOR="+id;
-            PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
 			ResultSet rs3 = prepStmt3.executeQuery();
+
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
+
 			while(rs3.next()){
 				int id1 =Integer.parseInt(rs3.getString("ID"));
 				char tipo=rs3.getString("TIPO").charAt(0);
-				Date fecha=new Date(rs3.getString("FECHA"));
+				Date fecha=null;
 				int idCarga=Integer.parseInt(rs3.getString("ID_CARGA"));
-				
+
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
-	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				ResultSet rs2 = prepStmt2.executeQuery();
 				Carga carga=null;
-				
-				String nombre2=rs2.getString("NOMBRE");
-				Double peso=Double.parseDouble(rs2.getString("PESO"));
-				char estado2=rs2.getString("ESTADO").charAt(0);
-				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
-				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
-				
-				String sql4 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-	            PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
-				recursos.add(prepStmt4);
-				ResultSet rs4 = prepStmt4.executeQuery();
-				TipoDeCarga tipo4=null;
-				String nombre4=null;
-				while(rs4.next()){
-				nombre4=rs4.getString("NOMBRE");}
-				
-				tipo4=new TipoDeCarga(tipoCarga,nombre4);
-				
-				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo4);
-				
+				while(rs2.next())
+				{
+					String nombre2=rs2.getString("NOMBRE");
+					Double peso=Double.parseDouble(rs2.getString("PESO"));
+					char estado2=rs2.getString("ESTADO").charAt(0);
+					int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+					int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
+
+					String sql4 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+					recursos.add(prepStmt4);
+					ResultSet rs4 = prepStmt4.executeQuery();
+					TipoDeCarga tipo4=null;
+					String nombre4=null;
+					while(rs4.next()){
+						nombre4=rs4.getString("NOMBRE");}
+					prepStmt4.close();
+					tipo4=new TipoDeCarga(tipoCarga,nombre4);
+
+					carga=new Carga(id,nombre2,peso,estado2,dias2,tipo4);
+				}
+				prepStmt2.close();
 				entregas.add(new Entrega(id1,tipo,fecha,carga));
-				
+
 			}
 			prepStmt3.close();
 			importadores.add(new Importador(id, nombre, login,clave,tipo0, registro, entregas,cargas));
@@ -184,9 +188,9 @@ public class DAOTablaImportadores {
 			String clave = rs.getString("CLAVE");
 			String registro = rs.getString("REGISTRO_ADUANA");
 			char tipo0 = rs.getString("TIPO").charAt(0);
-			
+
 			String sql1 = "select * from CARGAS WHERE ID_IMPORTADOR="+id;
-            PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			ArrayList<Carga> cargas=new ArrayList<Carga>();
@@ -197,22 +201,22 @@ public class DAOTablaImportadores {
 				int dias=Integer.parseInt(rs1.getString("DIAS_EN_PUERTO"));
 				char estado=rs1.getString(rs1.getString("ESTADO")).charAt(0);
 				int tipoCarga=Integer.parseInt(rs1.getString("ID_TIPO_CARGA"));
-				
+
 				String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				ResultSet rs2 = prepStmt2.executeQuery();
 				TipoDeCarga tipo=null;
-				
+
 				String nombre2=rs2.getString("NOMBRE");
-				
+
 				tipo=new TipoDeCarga(tipoCarga,nombre2);
-				
+
 				cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
-				
+
 			}
 			String sql3 = "select * from ENTREGAS NATURAL JOIN OPERACIONES WHERE ID_IMPORTADOR="+id;
-            PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
 			ResultSet rs3 = prepStmt3.executeQuery();
 			ArrayList<Entrega> entregas=new ArrayList<Entrega>();
@@ -221,22 +225,22 @@ public class DAOTablaImportadores {
 				char tipo=rs3.getString("TIPO").charAt(0);
 				Date fecha=new Date(rs3.getString("FECHA"));
 				int idCarga=Integer.parseInt(rs3.getString("ID_CARGA"));
-				
+
 				String sql2 = "select * from CARGAS WHERE ID="+idCarga;
-	            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				ResultSet rs2 = prepStmt2.executeQuery();
 				Carga carga=null;
-				
+
 				String nombre2=rs2.getString("NOMBRE");
 				Double peso=Double.parseDouble(rs2.getString("PESO"));
 				char estado2=rs2.getString("NOMBRE").charAt(0);
 				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
-				
+
 				carga=new Carga(id,nombre2,peso,estado2,dias2,null);
-				
+
 				entregas.add(new Entrega(id1,tipo,fecha,carga));
-				
+
 			}
 			importador=new Importador(id, nombre, login,clave,tipo0, registro, entregas,cargas);
 		}
@@ -259,12 +263,12 @@ public class DAOTablaImportadores {
 		sql += importador.getNombre() + "','";
 		sql += importador.getLogin() + "','";
 		sql += importador.getClave() +"')";
-		
+
 		String sql2="INSERT INTO IMPORTADORES VALUES ("
 				+importador.getId()+",'"
-			    +importador.getRegistro()+"','"
-		        +importador.getTipo()+"')";
-		
+				+importador.getRegistro()+"','"
+				+importador.getTipo()+"')";
+
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -276,7 +280,7 @@ public class DAOTablaImportadores {
 		prepStmt2.executeUpdate();
 
 	}
-	
+
 	/**
 	 * Método que actualiza el Agente que entra como parámetro en la base de datos.
 	 * @param Agente - el Agente a actualizar. Agente !=  null
@@ -292,7 +296,7 @@ public class DAOTablaImportadores {
 		sql += "login='" + importador.getLogin()+"', ";
 		sql += "clave='" + importador.getClave()+"'";
 		sql += " WHERE id = " + importador.getId();
-		
+
 		String sql1 = "UPDATE IMPORTADORES SET ";
 		sql1 += "registro_aduana='" + importador.getRegistro() + "', ";
 		sql1 += "tipo='" + importador.getLogin()+"', ";
@@ -320,7 +324,7 @@ public class DAOTablaImportadores {
 
 		String sql0 = "DELETE FROM USUARIOS";
 		sql0 += " WHERE id = " + importador.getId();
-		
+
 		String sql = "DELETE FROM IMPORTADORES";
 		sql += " WHERE id = " + importador.getId();
 
