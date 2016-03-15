@@ -111,28 +111,36 @@ public class DAOTablaEntregas {
 		return entregas;	
 	}
 
-	public void addEntrega(int idEntrega, int idCarga, int idImportador,int factura) throws SQLException, Exception {
+	public void addEntrega(int idCarga, int idTipoCarga, double peso) throws SQLException, Exception {
 
-		/*String sql = "INSERT INTO OPERACIONES VALUES (";
-		sql += idEntrega + ",'";
-		sql += factura + "','";
+		int num=70;
+		String sql = "INSERT INTO OPERACIONES VALUES";
+		sql += "('"+num+ "',";
+		sql += "null,'";
 		sql +=  "E','";
-		sql +=  "')";
-		
-		sql += idCarga +"')";*/
-		String sql2="INSERT INTO ENTREGAS VALUES ("
-				+idEntrega+",'"
-				+idImportador+"')";
+		sql +=  "12/12/12 11:11:11,0', (SELECT ID FROM CARGAS WHERE ID="+idCarga;
+		sql += " AND ID_TIPO_CARGA="+idTipoCarga;
+		sql += " AND PESO="+peso+"))";
+
+		String sql2="INSERT INTO ENTREGAS VALUES ('"
+				+num+"',(SELECT ID_IMPORTADOR FROM CARGAS WHERE ID="+idCarga+"))";
 
 
-		//System.out.println("SQL stmt:" + sql);
+		System.out.println("SQL stmt:" + sql);
 
-		//PreparedStatement prepStmt = conn.prepareStatement(sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		System.out.println("a");
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		//recursos.add(prepStmt);
+		System.out.println("b");
+		recursos.add(prepStmt);
+		System.out.println("a1");
 		recursos.add(prepStmt2);
-		//prepStmt.executeUpdate();
+		System.out.println("b1");
+		prepStmt.executeUpdate();
+		System.out.println("a2");
 		prepStmt2.executeUpdate();
+		System.out.println("b2");
+		
 
 	}
 

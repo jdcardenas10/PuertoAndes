@@ -228,7 +228,7 @@ public class PuertoAndesMaster {
 	 * @param entrega
 	 * @throws Exception
 	 */
-	public void addEntrega(int idEntrega, int idCarga, int importador) throws Exception {
+	public void addEntrega(int idCarga, int idTipoCarga, double peso) throws Exception {
 		
 		DAOTablaEntregas daoEntregas = new DAOTablaEntregas();
 		try 
@@ -236,7 +236,7 @@ public class PuertoAndesMaster {
 			//////Transacción
 			this.conn = darConexion();
 			daoEntregas.setConn(conn);
-			daoEntregas.addEntrega(idEntrega, idCarga,importador,0);
+			daoEntregas.addEntrega(idCarga, idTipoCarga,peso);
 			conn.commit();
 			System.out.println("a");
 
