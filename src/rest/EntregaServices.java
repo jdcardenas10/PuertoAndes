@@ -64,10 +64,10 @@ public class EntregaServices {
      * @return Json con el video que agrego o Json con el error que se produjo
      */
 	@PUT
-	@Path("/entregas")
+	@Path("/entrega")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addEntrega(Entrega entrega, Importador i) {
+	public Response addEntrega(Entrega entrega, int i) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		try {
 			tm.addEntrega(entrega,i);

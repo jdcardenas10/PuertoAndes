@@ -106,11 +106,11 @@ public class DAOTablaEntregas {
 		return entregas;	
 	}
 
-	public void addEntrega(Entrega entrega, Importador importador, Factura factura) throws SQLException, Exception {
+	public void addEntrega(Entrega entrega, int idImportador,int factura) throws SQLException, Exception {
 
 		String sql = "INSERT INTO OPERACIONES VALUES (";
 		sql += entrega.getId() + ",'";
-		sql += factura.getId() + "','";
+		sql += factura + "','";
 		sql += entrega.getTipo() + "','";
 		sql += entrega.getFecha() +"')";
 		sql += entrega.getCarga().getId() +"')";
@@ -118,7 +118,7 @@ public class DAOTablaEntregas {
 		//TODO
 		String sql2="INSERT INTO ENTREGAS VALUES ("
 				+entrega.getId()+",'"
-		        +importador.getId()+"')";
+		        +idImportador+"')";
 		
 
 		System.out.println("SQL stmt:" + sql);
