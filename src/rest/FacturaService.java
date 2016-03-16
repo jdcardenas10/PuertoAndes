@@ -64,10 +64,9 @@ public class FacturaService {
      * @return Json con el video que agrego o Json con el error que se produjo
      */
 	@PUT
-	@Path("/entrega/{idBuque}")
+	@Path("/factura/{idBuque}")
 	public void addFactura(@javax.ws.rs.PathParam("idBuque") int idBuque) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
-		Entrega s;
 		try {
 			tm.addFactura(idBuque);
 		} catch (Exception e) {

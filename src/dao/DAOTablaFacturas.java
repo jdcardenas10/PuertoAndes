@@ -3,6 +3,8 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -125,11 +127,44 @@ public class DAOTablaFacturas {
 	}
 
 
-	public void addEntrega(int idBuque) {
+	public void addFactura(int idBuque) throws Exception {
+		int num= 16;
+		double valor=0;
+		int id_expor=0;
+		ArrayList<Integer> idOperaciones = new ArrayList<Integer>();
 		
+		
+		String sql = "select * from (operaciones natural join arribos) natural join ( select id as id_carga, id_exportador, peso from cargas)where id_buque="+idBuque;
+		System.out.println("SQL stmt:" + sql);
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		while (rs.next())
+		{
+			idOperaciones.add(Integer.parseInt(rs.getString("ID")));
+			id_expor= Integer.parseInt(rs.getString("ID_EXPORTADOR"));
+			valor += Integer.parseInt(rs.getString("PESO"))*2000;
+			
+		}
+		
+		actualizarOperaciones(idOperaciones);
+		String sql1 = "INSERT INTO FACTURAS VALUES(";
+		sql1 += num +",";
+		sql1 += id_expor+",";
+		sql1 += valor+",";
+		sql1 += "null)";
+
+		System.out.println("SQL stmt:" + sql1);
+
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql1);
+		recursos.add(prepStmt2);
+		prepStmt2.executeUpdate();
 		
 	}
 	
-	
+	public void actualizarOperaciones(ArrayList<Integer> ops)
+	{
+		
+	}
 
 }

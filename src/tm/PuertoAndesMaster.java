@@ -423,7 +423,7 @@ public class PuertoAndesMaster {
 			//////Transacción
 			this.conn = darConexion();
 			daoFacturas.setConn(conn);
-			daoFacturas.addEntrega(idBuque);
+			daoFacturas.addFactura(idBuque);
 			conn.commit();
 			System.out.println("a");
 
