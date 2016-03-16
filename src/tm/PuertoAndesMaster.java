@@ -308,7 +308,7 @@ public class PuertoAndesMaster {
 		return null;
 	}
 
-	public List<Exportador> buscarExportadorPor(String name) throws Exception {
+	public List<Exportador> buscarExportadorPor(String tipoExportador, int idBuque, String tipoCarga, String fecha1, String fecha2) throws Exception {
 		ArrayList<Exportador> exportadores;
 		DAOTablaExportadores dao = new DAOTablaExportadores();
 		try 
@@ -316,7 +316,7 @@ public class PuertoAndesMaster {
 			//////Transacción
 			this.conn = darConexion();
 			dao.setConn(conn);
-			exportadores = dao.buscarExportadorPor(name);
+			exportadores = dao.buscarExportadorPor(tipoExportador,idBuque,tipoCarga,fecha1,fecha2);
 
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
