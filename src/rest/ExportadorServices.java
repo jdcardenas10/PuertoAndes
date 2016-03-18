@@ -65,12 +65,10 @@ public class ExportadorServices {
 	@GET
 	@Path("/buscarExportador/{tipoExpo}/{idBuque}/{tipoCarga}/{fecha1}/{fecha2}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getExportadoresPor(@javax.ws.rs.PathParam("tipoExpo") String tipoExpo,@javax.ws.rs.PathParam("idBuque") int idBuque,@javax.ws.rs.PathParam("tipoCarga") String tipoCarga,@javax.ws.rs.PathParam("fecha1") String fecha1,@javax.ws.rs.PathParam("fecha2") String fecha2) {
+	public Response getExportadoresPor(@javax.ws.rs.PathParam("tipoExpo") String tipoExpo,@javax.ws.rs.PathParam("idBuque") int idBuque,@javax.ws.rs.PathParam("tipoCarga") int tipoCarga,@javax.ws.rs.PathParam("fecha1") String fecha1,@javax.ws.rs.PathParam("fecha2") String fecha2) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		List<Exportador> exportadores= new ArrayList<Exportador>();
 		try {
-			if ((tipoExpo == null || tipoExpo.length() == 0)&&(idBuque ==0)&&(tipoCarga == null || tipoCarga.length() == 0)&&(fecha1 == null || fecha1.length() == 0)&&(fecha2 == null || fecha2.length() == 0))
-				throw new Exception("Nombre del video no valido");
 			exportadores = tm.buscarExportadorPor(tipoExpo,idBuque,tipoCarga,fecha1,fecha2);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

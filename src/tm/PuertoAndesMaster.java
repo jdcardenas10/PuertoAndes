@@ -308,7 +308,7 @@ public class PuertoAndesMaster {
 		return null;
 	}
 
-	public List<Exportador> buscarExportadorPor(String tipoExportador, int idBuque, String tipoCarga, String fecha1, String fecha2) throws Exception {
+	public List<Exportador> buscarExportadorPor(String tipoExportador, int idBuque, int tipoCarga, String fecha1, String fecha2) throws Exception {
 		ArrayList<Exportador> exportadores;
 		DAOTablaExportadores dao = new DAOTablaExportadores();
 		try 

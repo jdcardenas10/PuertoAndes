@@ -372,8 +372,50 @@ public class DAOTablaExportadores {
 		prepStmt.executeUpdate();
 	}
 
-	public ArrayList<Exportador> buscarExportadorPor(String name, int idBuque, String tipoCarga, String fecha1, String fecha2) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Exportador> buscarExportadorPor(String tipoExpo, int idBuque, int tipoCarga, String fecha1, String fecha2) {
+		
+		ArrayList<Exportador> exportadores = new ArrayList<Exportador>();
+		boolean otro=false;
+		
+		String sql="select id_exportador,tipo_exportador,rut,nombre_exportador,id_buque,nombre_buque,id_carga,peso,id_tipo_carga,estado,dias_en_puerto,fecha ";
+        sql += "from operaciones natural join arribos "; 
+        sql += "natural join (select id as id_carga, id_exportador, peso, id_tipo_carga, estado,dias_en_puerto from cargas) "; 
+        sql += "natural join (select id as id_buque, nombre as nombre_buque from buques) ";
+        sql += "natural join (select id as id_exportador, naturaleza as tipo_exportador, rut, nombre as nombre_exportador from exportadores natural join usuarios) ";
+        
+        if(tipoExpo!=null)
+        {
+        	sql += "where tipo_exportador=" + tipoExpo; 
+        	otro =true;
+        }
+        if(idBuque!=0)
+        {
+        	if(otro=true)
+        	{
+        		sql += " AND " + "id_buque=" + idBuque;
+        	}
+        	else
+        	{
+        		sql += "where id_buque=" + idBuque;
+        		otro=true;
+        	}
+        }
+        if(tipoCarga!=0)
+        {
+        	if(otro=true)
+        	{
+        		sql += " AND " + "id_tipo_carga=" + tipoCarga;
+        	}
+        	else
+        	{
+        		sql += "where id_tipo_carga=" + tipoCarga;
+        		otro=true;
+        	}
+        }
+        
+        
+        
+        	
+		return exportadores;
 	}
 }
