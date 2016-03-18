@@ -372,16 +372,16 @@ public class DAOTablaExportadores {
 		prepStmt.executeUpdate();
 	}
 
-	public ArrayList<Exportador> buscarExportadorPor(String tipoExpo, int idBuque, int tipoCarga, String fecha1, String fecha2) {
+	public ArrayList<Exportador> buscarExportadorPor(String tipoExpo, int idBuque, int tipoCarga, String fecha1, String fecha2) throws Exception {
 		
 		ArrayList<Exportador> exportadores = new ArrayList<Exportador>();
 		boolean otro=false;
 		
-		String sql="select id_exportador,tipo_exportador,rut,nombre_exportador,id_buque,nombre_buque,id_carga,peso,id_tipo_carga,estado,dias_en_puerto,fecha ";
+		String sql="select id_exportador,tipo_exportador,rut,nombre_exportador,login,clave,id_buque,nombre_buque,id_carga,peso,id_tipo_carga,estado,dias_en_puerto,fecha ";
         sql += "from operaciones natural join arribos "; 
         sql += "natural join (select id as id_carga, id_exportador, peso, id_tipo_carga, estado,dias_en_puerto from cargas) "; 
         sql += "natural join (select id as id_buque, nombre as nombre_buque from buques) ";
-        sql += "natural join (select id as id_exportador, naturaleza as tipo_exportador, rut, nombre as nombre_exportador from exportadores natural join usuarios) ";
+        sql += "natural join (select id as id_exportador, naturaleza as tipo_exportador, rut, nombre as nombre_exportador,login,clave from exportadores natural join usuarios) ";
         
         if(tipoExpo!=null)
         {
@@ -413,8 +413,55 @@ public class DAOTablaExportadores {
         	}
         }
         
-        
-        
+        if(fecha1!=null && fecha2!=null)
+        {
+        	if(otro=true)
+        	{
+        		sql += " AND " + "fecha between " + fecha1 + " AND "+fecha2;
+        	}
+        	else
+        	{
+        		sql +="where fecha between " + fecha1 + " AND "+fecha2;
+        	}
+        }
+        else
+        {
+        	if(fecha1!=null)
+        	{
+        		if(otro=true)
+            	{
+            		sql += " AND " + "fecha = " + fecha1;
+            	}
+            	else
+            	{
+            		sql +="where fecha=" + fecha1;
+            	}
+        	}
+        	if(fecha2!=null)
+        	{
+        		if(otro=true)
+            	{
+            		sql += " AND " + "fecha = " + fecha2;
+            	}
+            	else
+            	{
+            		sql +="where fecha=" + fecha2;
+            	}
+        	}
+        }
+        System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		
+		int exActual=0;
+		ArrayList<Carga> cargas = new ArrayList<Carga>();
+		while(rs.next())
+		{
+			
+		}
         	
 		return exportadores;
 	}
