@@ -139,7 +139,43 @@ public class DAOTablaSalidas {
 		sql += salida.getId() + ",";
 		sql += factura + ",'";
 		sql += salida.getTipo() + "','";
-		sql += salida.getFecha()+"',";
+		sql += "CURRENT_DATE"+"',";
+		sql +=salida.getCarga().getId()+"')";
+		
+		String sql2="INSERT INTO SALIDAS VALUES ("
+				+salida.getId()+","
+		        +idAgente+","
+		        +salida.getMuelle().getId()+","
+		        +salida.getBuque().getId()+","
+		        +salida.getTipoArribo()+","
+		        +salida.getCamion()+",";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt);
+		recursos.add(prepStmt2);
+		prepStmt.executeUpdate();
+		prepStmt2.executeUpdate();
+
+	}
+	
+	/**
+	 * Método que agrega el Administrador que entra como parámetro a la base de datos.
+	 * @param Administrador - el Administrador a agregar. Administrador !=  null
+	 * <b> post: </b> se ha agregado el Administrador a la base de datos en la transaction actual. pendiente que el Administrador master
+	 * haga commit para que el Administrador baje  a la base de datos.
+	 * @throws SQLException - Cualquier error que la base de datos arroje. No pudo agregar el Administrador a la base de datos
+	 * @throws Exception - Cualquier error que no corresponda a la base de datos
+	 */
+	public void addSinFactura(Salida salida,int idAgente) throws SQLException, Exception {
+
+		String sql = "INSERT INTO Operaciones VALUES (";
+		sql += salida.getId() + ",";
+		sql += "null" + ",'";
+		sql += salida.getTipo() + "',";
+		sql += "CURRENT_DATE"+",";
 		sql +=salida.getCarga().getId()+"')";
 		
 		String sql2="INSERT INTO SALIDAS VALUES ("

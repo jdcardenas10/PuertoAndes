@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 import tm.PuertoAndesMaster;
 import vos.ListaArribosSalidas;
-import vos.Salida;
+import vos.SalidaIDAgente;
 
 
 public class SalidaServices {
@@ -66,10 +66,10 @@ public class SalidaServices {
 	@Path("/agregar")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addVideo(Salida salida) {
+	public Response addVideo(SalidaIDAgente salida) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		try {
-			tm.addSalida(salida);
+			tm.addSalida(salida.getSalida(),salida.getIdAgente());
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

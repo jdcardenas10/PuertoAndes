@@ -14,13 +14,17 @@ import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
 import dao.DAOTablaImportadores;
+import dao.DAOTablaMuelles;
+import dao.DAOTablaSalidas;
 import dao.DaoTablaTiposYBuques;
 import vos.Administrador;
+import vos.CargaBuque;
 import vos.Entrega;
 import vos.Exportador;
 import vos.Factura;
 import vos.Importador;
 import vos.ListaArribosSalidas;
+import vos.Muelle;
 import vos.Salida;
 
 
@@ -341,8 +345,47 @@ public class PuertoAndesMaster {
 		return exportadores;
 	}
 
-	public void addSalida(Salida salida) {
-		// TODO Auto-generated method stub
+	public void addSalida(Salida salida, int idAgente) throws Exception {
+		DAOTablaSalidas dao1 = new DAOTablaSalidas();
+		DAOTablaMuelles dao2 = new DAOTablaMuelles();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao1.setConn(conn);
+			dao2.setConn(conn);
+			
+			Muelle muelle=dao2.buscarMuellePorIDBuque(salida.getBuque().getId());
+			
+		if(muelle!=null)
+		{
+			dao2.vaciarMuelle(muelle.getId());
+			dao1.addSinFactura(salida, idAgente);
+			conn.commit();
+		}
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao1.cerrarRecursos();
+				dao2.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		
+		
 		
 	}
 
@@ -450,14 +493,14 @@ public class PuertoAndesMaster {
 		
 	}
 
-	public void addTipoCargaABarco(int idBuque, int idCarga) throws Exception {
+	public void addTipoCargaABarco(CargaBuque relacion) throws Exception {
 		DaoTablaTiposYBuques dao = new DaoTablaTiposYBuques();
 		try 
 		{
 			//////Transacción
 			this.conn = darConexion();
 			dao.setConn(conn);
-			dao.addTipoCarga(idCarga, idBuque);
+			dao.addTipoCarga(relacion.getIdCarga(), relacion.getIdBuque());
 			conn.commit();
 			System.out.println("a");
 
