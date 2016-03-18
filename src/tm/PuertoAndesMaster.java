@@ -14,6 +14,7 @@ import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
 import dao.DAOTablaImportadores;
+import dao.DaoTablaTiposYBuques;
 import vos.Administrador;
 import vos.Entrega;
 import vos.Exportador;
@@ -438,6 +439,39 @@ public class PuertoAndesMaster {
 		} finally {
 			try {
 				daoFacturas.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		
+	}
+
+	public void addTipoCargaABarco(int idBuque, int idCarga) throws Exception {
+		DaoTablaTiposYBuques dao = new DaoTablaTiposYBuques();
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			dao.addTipoCarga(idCarga, idBuque);
+			conn.commit();
+			System.out.println("a");
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {
