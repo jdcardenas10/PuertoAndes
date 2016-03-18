@@ -377,15 +377,15 @@ public class DAOTablaExportadores {
 		ArrayList<Exportador> exportadores = new ArrayList<Exportador>();
 		boolean otro=false;
 		
-		String sql="select id_exportador,tipo_exportador,rut,nombre_exportador,login,clave,id_buque,nombre_buque,id_carga,peso,id_tipo_carga,estado,dias_en_puerto,fecha ";
+		String sql="select id_exportador,tipo_exportador,rut,nombre_exportador,login,clave,id_buque,nombre_buque,id_carga,peso,estado,dias_en_puerto,nombre_carga, id_tipo_carga,nombre_tipo_carga,fecha ";
         sql += "from operaciones natural join arribos "; 
-        sql += "natural join (select id as id_carga, id_exportador, peso, id_tipo_carga, estado,dias_en_puerto from cargas) "; 
+        sql += "natural join (select id as id_carga, id_exportador, peso, id_tipo_carga, estado,dias_en_puerto,nombre_tipo_carga, nombre as nombre_carga from cargas natural join (select id as id_tipo_carga, nombre as nombre_tipo_carga from tipos_de_cargas)) "; 
         sql += "natural join (select id as id_buque, nombre as nombre_buque from buques) ";
         sql += "natural join (select id as id_exportador, naturaleza as tipo_exportador, rut, nombre as nombre_exportador,login,clave from exportadores natural join usuarios) ";
         
         if(tipoExpo!=null)
         {
-        	sql += "where tipo_exportador=" + tipoExpo; 
+        	sql += "where tipo_exportador= '" + tipoExpo+"'"; 
         	otro =true;
         }
         if(idBuque!=0)
@@ -413,7 +413,7 @@ public class DAOTablaExportadores {
         	}
         }
         
-        if(fecha1!=null && fecha2!=null)
+        if(!fecha1.equals("nada") && !fecha2.equals("nada"))
         {
         	if(otro=true)
         	{
@@ -426,7 +426,7 @@ public class DAOTablaExportadores {
         }
         else
         {
-        	if(fecha1!=null)
+        	if(!fecha1.equals("nada"))
         	{
         		if(otro=true)
             	{
@@ -437,7 +437,7 @@ public class DAOTablaExportadores {
             		sql +="where fecha=" + fecha1;
             	}
         	}
-        	if(fecha2!=null)
+        	if(!fecha2.equals("nada"))
         	{
         		if(otro=true)
             	{
@@ -455,12 +455,54 @@ public class DAOTablaExportadores {
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
 		
-		
-		int exActual=0;
+		int expoActual=0;
+		String nombre="";
+		String login="";
+		String clave="";
+		String rut="";
+		char naturaleza=' ';
 		ArrayList<Carga> cargas = new ArrayList<Carga>();
+		
+		boolean agregar=false;
+		
 		while(rs.next())
 		{
+			int id = Integer.parseInt(rs.getString("ID_EXPORTADOR"));
 			
+			if(id!=expoActual)
+			{
+				expoActual=id;
+				
+				if(expoActual!=0)
+				{
+					agregar=true;
+				}
+				
+				nombre = rs.getString("NOMBRE_EXPORTADOR");
+				login = rs.getString("LOGIN");
+				clave = rs.getString("CLAVE");
+				rut = rs.getString("RUT");
+				naturaleza = rs.getString("TIPO_EXPORTADOR").charAt(0);
+				cargas=new ArrayList<Carga>();
+				
+			}
+			
+			int idCarga =Integer.parseInt(rs.getString("ID_CARGA"));
+			String nombreCarga=rs.getString("NOMBRE_CARGA");
+			Double peso=Double.parseDouble(rs.getString("PESO"));
+			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
+			char estado=rs.getString("ESTADO").charAt(0);
+			int tipoCargaCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			String nombreTipoCarga = rs.getString("NOMBRE_TIPO_CARGA");
+			
+			TipoDeCarga t = new TipoDeCarga(tipoCargaCarga, nombreTipoCarga);
+			cargas.add(new Carga(idCarga,nombreCarga,peso,estado,dias,t));
+			
+			
+			if(agregar==true)
+			{
+				exportadores.add(new Exportador(id,nombre,login,clave,rut,naturaleza,null,cargas));
+			}	
 		}
         	
 		return exportadores;
