@@ -171,22 +171,29 @@ public class DAOTablaSalidas {
 	 */
 	public void addSinFactura(Salida salida,int idAgente) throws SQLException, Exception {
 
+		String carga="null";
+		if( salida.getCamion()!=null){carga=salida.getCamion().getId()+"";}
+		
 		String sql = "INSERT INTO Operaciones VALUES (";
 		sql += salida.getId() + ",";
 		sql += "null" + ",'";
 		sql += salida.getTipo() + "',";
 		sql += "CURRENT_DATE"+",";
-		sql +=salida.getCarga().getId()+"')";
+		sql +=carga+")";
 		
-		String sql2="INSERT INTO SALIDAS VALUES ("
-				+salida.getId()+","
-		        +idAgente+","
-		        +salida.getMuelle().getId()+","
-		        +salida.getBuque().getId()+","
-		        +salida.getTipoArribo()+","
-		        +salida.getCamion()+",";
+		String camion="null";
+		if( salida.getCamion()!=null){camion=salida.getCamion().getId()+"";}
+		
+		String sql2="INSERT INTO SALIDAS VALUES (";
+				sql2+=salida.getId()+",";
+						sql2+=idAgente+",";
+		                 sql2+=salida.getMuelle().getId()+",";
+		                    sql2+=salida.getBuque().getId()+",'";
+		                      sql2+=salida.getTipoArribo()+"',";
+		                        sql2+=camion+")";
 
 		System.out.println("SQL stmt:" + sql);
+		System.out.println("SQL stmt:" + sql2);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);

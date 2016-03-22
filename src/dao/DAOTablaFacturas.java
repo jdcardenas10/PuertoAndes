@@ -128,7 +128,7 @@ public class DAOTablaFacturas {
 
 
 	public void addFactura(int idBuque) throws Exception {
-		int num= 16;
+		int num= 17;
 		double valor=0;
 		int id_expor=0;
 		ArrayList<Integer> idOperaciones = new ArrayList<Integer>();

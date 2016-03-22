@@ -113,7 +113,7 @@ public class DAOTablaEntregas {
 
 	public void addEntrega(int idCarga, int idTipoCarga, double peso) throws SQLException, Exception {
 
-		int num=96;
+		int num=97;
 		String sql = "INSERT INTO OPERACIONES VALUES";
 		sql += "('"+num+ "',";
 		sql += "null,'";

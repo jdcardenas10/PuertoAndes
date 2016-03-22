@@ -359,9 +359,9 @@ public class PuertoAndesMaster {
 			
 		if(muelle!=null)
 		{
+			salida.setMuelle(muelle);
 			dao2.vaciarMuelle(muelle.getId());
 			dao1.addSinFactura(salida, idAgente);
-			conn.commit();
 		}
 
 		} catch (SQLException e) {

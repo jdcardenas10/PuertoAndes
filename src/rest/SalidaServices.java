@@ -14,7 +14,7 @@ import tm.PuertoAndesMaster;
 import vos.ListaArribosSalidas;
 import vos.SalidaIDAgente;
 
-
+@Path("salidas")
 public class SalidaServices {
 
 	/**
