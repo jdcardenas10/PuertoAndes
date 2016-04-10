@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import dao.DAOTablaAdministradores;
+import dao.DAOTablaAreas;
 import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
@@ -18,6 +19,7 @@ import dao.DAOTablaMuelles;
 import dao.DAOTablaSalidas;
 import dao.DaoTablaTiposYBuques;
 import vos.Administrador;
+import vos.Area;
 import vos.CargaBuque;
 import vos.Entrega;
 import vos.Exportador;
@@ -524,6 +526,44 @@ public class PuertoAndesMaster {
 			}
 		}
 		
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Area> darAreas() throws Exception{
+		ArrayList<Area> areas;
+		DAOTablaAreas dao=new DAOTablaAreas();
+		
+		try 
+		{
+			//////Transacción
+			this.conn = darConexion();
+			dao.setConn(conn);
+			areas = dao.darAreas();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return areas;
 	}
 	
 }
