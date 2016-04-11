@@ -71,11 +71,14 @@ public class DAOTablaSilos {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
 			Double capacidad=Double.parseDouble(rs.getString("CAPACIDAD"));
 			String nombre=rs.getString("NOMBRE");
 			
 			
-			areas.add(new Silo(id, nombre, capacidad));
+			areas.add(new Silo(id,estado,tipo, nombre, capacidad));
 		}
 		return areas;
 	}
@@ -102,11 +105,14 @@ public class DAOTablaSilos {
 		while (rs.next()) {
 
 			int id = Integer.parseInt(rs.getString("ID"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
 			Double capacidad=Double.parseDouble(rs.getString("CAPACIDAD"));
 			String nombre=rs.getString("NOMBRE");
 			
 			
-			area=new Silo(id, nombre, capacidad);
+			area=new Silo(id,estado,tipo, nombre, capacidad);
 			}
 
 		return area;

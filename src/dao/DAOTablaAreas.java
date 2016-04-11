@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Area;
+import vos.TipoDeCarga;
 
 /**
  * Clase DAO que se conecta la base de datos usando JDBC para resolver los requerimientos de la aplicación
@@ -75,7 +76,35 @@ public class DAOTablaAreas {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			areas.add(new Area(id));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
+			/*if(tipo=='B')
+			{
+				String sql2 = "SELECT * from BODEGAS WHERE ID="+id;
+
+				System.out.println("SQL stmt:" + sql2);
+
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
+				while (rs2.next())
+				{
+					double ancho=rs2.getDouble("ANCHO");
+					double largo=rs2.getDouble("LARGO");
+					boolean plataformaExterna=false;
+					if(rs2.getString("PLATAFORMA_EXTERNA").charAt(0)=='S')
+					{
+						plataformaExterna=true;
+					}
+					int tipoDeCarga=rs2.getInt("TIPO_DE_CARGA");
+					
+					
+					double separacion=rs2.getDouble("ANCHO");;
+				
+				}*/
+				
+			areas.add(new Area(id,estado,tipo));
 		}
 		return areas;
 	}
@@ -101,7 +130,10 @@ public class DAOTablaAreas {
 
 		while (rs.next()) {
 			int id = Integer.parseInt(rs.getString("ID"));
-			area=new Area(id);
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
+			area=new Area(id,estado,tipo);
 		}
 
 		return area;

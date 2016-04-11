@@ -72,21 +72,24 @@ public class DAOTablaCobertizos {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
-			Double tipo=Double.parseDouble(rs.getString("ID_TIPO_CARGA"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
 			
-			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipo;
-			TipoDeCarga tipoCarga=null;
+			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
+			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipoDeCarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipoCarga=new TipoDeCarga(id1,nombre);
+				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			areas.add(new Cobertizo(id, ancho, tipoCarga));
+			areas.add(new Cobertizo(id,estado,tipo, ancho, tipoDeCarga));
 		}
 		return areas;
 	}
@@ -113,21 +116,24 @@ public class DAOTablaCobertizos {
 		while (rs.next()) {
 
 			int id = Integer.parseInt(rs.getString("ID"));
-			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
-			Double tipo=Double.parseDouble(rs.getString("ID_TIPO_CARGA"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
 			
-			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipo;
-			TipoDeCarga tipoCarga=null;
+			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
+			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipoDeCarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipoCarga=new TipoDeCarga(id1,nombre);
+				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			area=new Cobertizo(id, ancho, tipoCarga);
+			area=new Cobertizo(id,estado,tipo, ancho, tipoDeCarga);
 		}
 
 		return area;
@@ -148,7 +154,7 @@ public class DAOTablaCobertizos {
 		String sql = "INSERT INTO COBERTIZOS VALUES (";
 		sql += area.getId() + ",";
 		sql += area.getDimension() + ",";
-		sql += area.getTipo().getId() + ")";
+		sql += area.getTipoDeCarga().getId() + ")";
 		
 		System.out.println("SQL stmt:" + sql);
 

@@ -11,12 +11,25 @@ public class Area {
 	private int id;
 	
 	/**
+	 * Id del area
+	 */
+	@JsonProperty(value="estado")
+	private char estado;
+	/**
+	 * Id del area
+	 */
+	@JsonProperty(value="tipo")
+	private char tipo;
+	
+	/**
 	 * metodo constructor de la clase area
 	 * @param id el id del area
 	 */
-	public Area(@JsonProperty(value="id") int id)
+	public Area(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo)
 	{
 		this.id=id;
+		this.estado=estado;
+		this.tipo=tipo;
 	}
 
 	/**
@@ -34,5 +47,22 @@ public class Area {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public char getEstado() {
+		return estado;
+	}
+
+	public void setEstado(char estado) {
+		this.estado = estado;
+	}
+
+	public char getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(char tipo) {
+		this.tipo = tipo;
+	}
+	
 	
 }

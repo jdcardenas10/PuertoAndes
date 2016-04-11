@@ -72,21 +72,24 @@ public class DAOTablaPatios {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
-			Double tipo=Double.parseDouble(rs.getString("ID_TIPO_CARGA"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
 			
-			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipo;
-			TipoDeCarga tipoCarga=null;
+			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
+			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipoDeCarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipoCarga=new TipoDeCarga(id1,nombre);
+				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			areas.add(new Patio(id, ancho, tipoCarga));
+			areas.add(new Patio(id,estado,tipo, ancho, tipoDeCarga));
 		}
 		return areas;
 	}
@@ -113,21 +116,24 @@ public class DAOTablaPatios {
 		while (rs.next()) {
 
 			int id = Integer.parseInt(rs.getString("ID"));
-			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
-			Double tipo=Double.parseDouble(rs.getString("ID_TIPO_CARGA"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
 			
-			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipo;
-			TipoDeCarga tipoCarga=null;
+			Double ancho=Double.parseDouble(rs.getString("DIMENSIONES"));
+			Double tipoCarga=Double.parseDouble(rs.getString("ID_TIPO_CARGA"));
+			
+			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+			TipoDeCarga tipoDECarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipoCarga=new TipoDeCarga(id1,nombre);
+				tipoDECarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			area=new Patio(id, ancho, tipoCarga);
+			area=new Patio(id,estado,tipo, ancho, tipoDECarga);
 		}
 
 		return area;
@@ -147,7 +153,7 @@ public class DAOTablaPatios {
 		String sql = "INSERT INTO PATIOS VALUES (";
 		sql += area.getId() + ",";
 		sql += area.getDimension() + ",";
-		sql += area.getTipo().getId() + ")";
+		sql += area.getTipoDeCarga().getId() + ")";
 		
 		System.out.println("SQL stmt:" + sql);
 

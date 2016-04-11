@@ -74,6 +74,9 @@ public class DAOTablaBodegas {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
 			Double ancho=Double.parseDouble(rs.getString("ANCHO"));
 			Double largo=Double.parseDouble(rs.getString("LARGO"));
 			Boolean plataformaExterna=false;
@@ -81,14 +84,14 @@ public class DAOTablaBodegas {
 			
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
 			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-			TipoDeCarga tipo=null;
+			TipoDeCarga tipoDeCarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipo=new TipoDeCarga(id1,nombre);
+				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			Double separacion=Double.parseDouble(rs.getString("SEPARACION"));
 			
@@ -109,7 +112,7 @@ public class DAOTablaBodegas {
 				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
 			}
 			
-			areas.add(new Bodega(id, ancho, largo, plataformaExterna, tipo,separacion, cuartos));
+			areas.add(new Bodega(id, estado,tipo,ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos));
 		}
 		return areas;
 	}
@@ -135,6 +138,9 @@ public class DAOTablaBodegas {
 
 		while (rs.next()) {
 			int id = Integer.parseInt(rs.getString("ID"));
+			char estado = rs.getString("ESTADO").charAt(0);
+			char tipo= rs.getString("TIPO").charAt(0);
+			
 			Double ancho=Double.parseDouble(rs.getString("ANCHO"));
 			Double largo=Double.parseDouble(rs.getString("LARGO"));
 			Boolean plataformaExterna=false;
@@ -142,14 +148,14 @@ public class DAOTablaBodegas {
 			
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
 			String sql1 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-			TipoDeCarga tipo=null;
+			TipoDeCarga tipoDeCarga=null;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while(rs1.next()){
 				int id1=Integer.parseInt(rs1.getString("ID"));
 				String nombre=rs1.getString("NOMBRE");
-				tipo=new TipoDeCarga(id1,nombre);
+				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			Double separacion=Double.parseDouble(rs.getString("SEPARACION"));
 			
@@ -170,7 +176,7 @@ public class DAOTablaBodegas {
 				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
 			}
 			
-			area=new Bodega(id, ancho, largo, plataformaExterna, tipo,separacion, cuartos);
+			area=new Bodega(id,estado,tipo, ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos);
 		}
 
 		return area;
@@ -196,7 +202,7 @@ public class DAOTablaBodegas {
 		sql += area.getAncho() + ",";
 		sql += area.getLargo() + ",";
 		sql += plataforma + ",";
-		sql += area.getTipo().getId() + ",";
+		sql += area.getTipoDeCarga().getId() + ",";
 		sql += area.getSeparacion() + ")";
 		
 		System.out.println("SQL stmt:" + sql);

@@ -22,9 +22,9 @@ public class Silo extends Area{
 	 * @param nombre, el nombre del silo
 	 * @param capacidad,  la capacidad del silo
 	 */
-	public Silo(@JsonProperty(value="id") int id,@JsonProperty(value="nombre") String nombre,@JsonProperty(value="capacidad") double capacidad)
+	public Silo(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo,@JsonProperty(value="nombre") String nombre,@JsonProperty(value="capacidad") double capacidad)
 	{
-		super(id);
+		super(id,estado,tipo);
 		this.nombre = nombre;
 		this.capacidad=capacidad;
 	}
