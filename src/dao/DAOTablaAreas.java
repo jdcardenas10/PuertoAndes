@@ -179,4 +179,16 @@ public class DAOTablaAreas {
 		recursos.add(prepStmt);
 		prepStmt.executeUpdate();
 	}
+
+	public void cerrarArea(int area) throws Exception {
+		
+		String sql = "UPDATE AREAS SET ESTADO=C ";
+		sql +="WHERE ID="+area;
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		prepStmt.executeUpdate();
+	}
 }

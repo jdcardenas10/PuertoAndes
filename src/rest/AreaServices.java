@@ -3,7 +3,9 @@ package rest;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -55,5 +57,23 @@ public class AreaServices {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 		return Response.status(200).entity(areas).build();
+	}
+	
+	/**
+	 * 
+	 * @param area
+	 * @return
+	 */
+	@POST
+	@Path("/cerrar")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void cerrarArea(int area) {
+		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+		try {
+			tm.cerrarArea(area);
+		} catch (Exception e) {
+			//return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		//return Response.status(200).entity(video).build();
 	}
 }
