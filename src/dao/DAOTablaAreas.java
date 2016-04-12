@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Area;
+import vos.Bodega;
+import vos.Cobertizo;
+import vos.Patio;
+import vos.Silo;
 import vos.TipoDeCarga;
 
 /**
@@ -74,16 +78,16 @@ public class DAOTablaAreas {
 		ResultSet rs = prepStmt.executeQuery();
 
 		while (rs.next()) {
-			
+
 			int id = Integer.parseInt(rs.getString("ID"));
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
-			
-			/*if(tipo=='B')
+
+			if(tipo=='B')
 			{
 				String sql2 = "SELECT * from BODEGAS WHERE ID="+id;
 
-				System.out.println("SQL stmt:" + sql2);
+				System.out.println("SQL stmt2:" + sql2);
 
 				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
@@ -97,16 +101,117 @@ public class DAOTablaAreas {
 					{
 						plataformaExterna=true;
 					}
-					int tipoDeCarga=rs2.getInt("TIPO_DE_CARGA");
+					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+
+					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+					recursos.add(prepStmt3);
+					ResultSet rs3 = prepStmt3.executeQuery();
+					TipoDeCarga tipoDeCarga=null;
+					String nombre=null;
+					while(rs3.next())
+					{
+						nombre=rs3.getString("NOMBRE");
+					}
+					prepStmt3.close();
+					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
+
+					double separacion=rs2.getDouble("ANCHO");
+					prepStmt2.close();
+					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null);
+					areas.add(b);
+				}
+
+			}
+			else if(tipo=='C')
+			{
+				String sql2 = "SELECT * from COBERTIZOS WHERE ID="+id;
+
+				System.out.println("SQL stmt2:" + sql2);
+
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
+				while (rs2.next())
+				{
+					double dimensiones=rs2.getDouble("DIMENSIONES");
+					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+
+					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+					recursos.add(prepStmt3);
+					ResultSet rs3 = prepStmt3.executeQuery();
+					TipoDeCarga tipoDeCarga=null;
+					String nombre=null;
+					while(rs3.next())
+					{
+						nombre=rs3.getString("NOMBRE");
+					}
+					prepStmt3.close();
+					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
+
 					
+					prepStmt2.close();
+					Cobertizo c = new Cobertizo(id,estado,tipo,dimensiones,tipoDeCarga);
+					areas.add(c);
+				}
+			}
+			else if(tipo=='P')
+			{
+				String sql2 = "SELECT * from PATIOS WHERE ID="+id;
+
+				System.out.println("SQL stmt2:" + sql2);
+
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
+				while (rs2.next())
+				{
+					double dimensiones=rs2.getDouble("DIMENSIONES");
+					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+
+					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+					recursos.add(prepStmt3);
+					ResultSet rs3 = prepStmt3.executeQuery();
+					TipoDeCarga tipoDeCarga=null;
+					String nombre=null;
+					while(rs3.next())
+					{
+						nombre=rs3.getString("NOMBRE");
+					}
+					prepStmt3.close();
+					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
+
 					
-					double separacion=rs2.getDouble("ANCHO");;
-				
-				}*/
-				
-			areas.add(new Area(id,estado,tipo));
+					prepStmt2.close();
+					Patio p = new Patio(id,estado,tipo,dimensiones,tipoDeCarga);
+					areas.add(p);
+				}
+			}
+			
+			else if(tipo=='S')
+			{
+				String sql2 = "SELECT * from SILOS WHERE ID="+id;
+
+				System.out.println("SQL stmt2:" + sql2);
+
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				ResultSet rs2 = prepStmt2.executeQuery();
+				while (rs2.next())
+				{
+					String nombre=rs2.getString("NOMBRE");
+					double capacidad=rs2.getDouble("CAPACIDAD");
+					
+					Silo s = new Silo(id,estado,tipo,nombre,capacidad);
+					areas.add(s);
+				}
+			}
 		}
+
 		return areas;
+
 	}
 
 
@@ -132,7 +237,7 @@ public class DAOTablaAreas {
 			int id = Integer.parseInt(rs.getString("ID"));
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
-			
+
 			area=new Area(id,estado,tipo);
 		}
 
@@ -151,7 +256,7 @@ public class DAOTablaAreas {
 
 		String sql = "INSERT INTO AREAS VALUES (";
 		sql += area.getId() + ")";
-		
+
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -181,10 +286,10 @@ public class DAOTablaAreas {
 	}
 
 	public void cerrarArea(int area) throws Exception {
-		
+
 		String sql = "UPDATE AREAS SET ESTADO=C ";
 		sql +="WHERE ID="+area;
-		
+
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
