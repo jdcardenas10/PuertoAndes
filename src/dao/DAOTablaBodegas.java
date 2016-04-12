@@ -112,7 +112,7 @@ public class DAOTablaBodegas {
 				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
 			}
 			
-			areas.add(new Bodega(id, estado,tipo,ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos));
+			areas.add(new Bodega(id, estado,tipo,ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos,null,null));
 		}
 		return areas;
 	}
@@ -176,7 +176,7 @@ public class DAOTablaBodegas {
 				cuartos.add(new CuartoFrio(id3,largo3,ancho3,alto,areaEnFuncion,libre));
 			}
 			
-			area=new Bodega(id,estado,tipo, ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos);
+			area=new Bodega(id,estado,tipo, ancho, largo, plataformaExterna, tipoDeCarga,separacion, cuartos,null,null);
 		}
 
 		return area;

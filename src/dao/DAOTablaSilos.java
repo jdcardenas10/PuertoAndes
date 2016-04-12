@@ -78,7 +78,7 @@ public class DAOTablaSilos {
 			String nombre=rs.getString("NOMBRE");
 			
 			
-			areas.add(new Silo(id,estado,tipo, nombre, capacidad));
+			areas.add(new Silo(id,estado,tipo, nombre, capacidad,null,null));
 		}
 		return areas;
 	}
@@ -112,7 +112,7 @@ public class DAOTablaSilos {
 			String nombre=rs.getString("NOMBRE");
 			
 			
-			area=new Silo(id,estado,tipo, nombre, capacidad);
+			area=new Silo(id,estado,tipo, nombre, capacidad,null,null);
 			}
 
 		return area;

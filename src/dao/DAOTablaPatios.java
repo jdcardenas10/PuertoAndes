@@ -89,7 +89,7 @@ public class DAOTablaPatios {
 				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			areas.add(new Patio(id,estado,tipo, ancho, tipoDeCarga));
+			areas.add(new Patio(id,estado,tipo, ancho, tipoDeCarga,null,null));
 		}
 		return areas;
 	}
@@ -133,7 +133,7 @@ public class DAOTablaPatios {
 				tipoDECarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			area=new Patio(id,estado,tipo, ancho, tipoDECarga);
+			area=new Patio(id,estado,tipo, ancho, tipoDECarga,null,null);
 		}
 
 		return area;

@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 import vos.Area;
 import vos.Bodega;
+import vos.Carga;
 import vos.Cobertizo;
+import vos.Operacion;
 import vos.Patio;
 import vos.Silo;
 import vos.TipoDeCarga;
@@ -82,6 +84,48 @@ public class DAOTablaAreas {
 			int id = Integer.parseInt(rs.getString("ID"));
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
+			ArrayList<Operacion> entradas=new ArrayList<Operacion>();
+			ArrayList<Operacion> salidas=new ArrayList<Operacion>();
+			
+			
+			String sql1 = "select * from OPERACIONES NATURAL JOIN CARGUES WHERE ID_AREA="+id;
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			recursos.add(prepStmt1);
+			ResultSet rs1 = prepStmt1.executeQuery();
+			while (rs1.next()){
+			
+				int idC= rs1.getInt("ID");
+				char tipoC=rs1.getString("TIPO").charAt(0);
+				int idCarga=rs1.getInt("ID_CARGA");
+				
+				String sql11 = "select * from CARGAS WHERE ID="+idCarga;
+				PreparedStatement prepStmt11 = conn.prepareStatement(sql11);
+				recursos.add(prepStmt11);
+				ResultSet rs11 = prepStmt11.executeQuery();
+				Carga carga=null;
+				while(rs1.next()){
+
+					String nombre1=rs1.getString("NOMBRE");
+					Double peso=Double.parseDouble(rs1.getString("PESO"));
+					int dias=Integer.parseInt(rs1.getString("DIAS_EN_PUERTO"));
+					char estadoCarga=rs1.getString("ESTADO").charAt(0);
+					int tipoCarga=Integer.parseInt(rs1.getString("ID_TIPO_CARGA"));
+
+					String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+					recursos.add(prepStmt2);
+					ResultSet rs2 = prepStmt2.executeQuery();
+					TipoDeCarga tipo=null;
+					String nombre2=null;
+					while(rs2.next())
+					{nombre2=rs2.getString("NOMBRE");}
+
+					tipo=new TipoDeCarga(tipoCarga,nombre2);
+
+					cargas.add(new Carga(id1,nombre1,peso,estadoCarga,dias,tipo));
+			}
+			
+			
 
 			if(tipo=='B')
 			{
@@ -119,7 +163,7 @@ public class DAOTablaAreas {
 					prepStmt2.close();
 					
 					
-					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null);
+					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null,entradas,salidas);
 					areas.add(b);
 				}
 
@@ -153,7 +197,7 @@ public class DAOTablaAreas {
 
 					
 					prepStmt2.close();
-					Cobertizo c = new Cobertizo(id,estado,tipo,dimensiones,tipoDeCarga);
+					Cobertizo c = new Cobertizo(id,estado,tipo,dimensiones,tipoDeCarga,entradas,salidas);
 					areas.add(c);
 				}
 			}
@@ -186,7 +230,7 @@ public class DAOTablaAreas {
 
 					
 					prepStmt2.close();
-					Patio p = new Patio(id,estado,tipo,dimensiones,tipoDeCarga);
+					Patio p = new Patio(id,estado,tipo,dimensiones,tipoDeCarga,entradas,salidas);
 					areas.add(p);
 				}
 			}
@@ -205,7 +249,7 @@ public class DAOTablaAreas {
 					String nombre=rs2.getString("NOMBRE");
 					double capacidad=rs2.getDouble("CAPACIDAD");
 					
-					Silo s = new Silo(id,estado,tipo,nombre,capacidad);
+					Silo s = new Silo(id,estado,tipo,nombre,capacidad,entradas,salidas);
 					areas.add(s);
 				}
 			}
@@ -239,7 +283,7 @@ public class DAOTablaAreas {
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
 
-			area=new Area(id,estado,tipo);
+			area=new Area(id,estado,tipo,null,null);
 		}
 
 		return area;

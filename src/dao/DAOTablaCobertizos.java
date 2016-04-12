@@ -89,7 +89,7 @@ public class DAOTablaCobertizos {
 				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			areas.add(new Cobertizo(id,estado,tipo, ancho, tipoDeCarga));
+			areas.add(new Cobertizo(id,estado,tipo, ancho, tipoDeCarga,null,null));
 		}
 		return areas;
 	}
@@ -133,7 +133,7 @@ public class DAOTablaCobertizos {
 				tipoDeCarga=new TipoDeCarga(id1,nombre);
 			}
 			
-			area=new Cobertizo(id,estado,tipo, ancho, tipoDeCarga);
+			area=new Cobertizo(id,estado,tipo, ancho, tipoDeCarga,null,null);
 		}
 
 		return area;
