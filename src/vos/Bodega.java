@@ -50,9 +50,10 @@ public class Bodega extends Area{
 	public Bodega(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo,@JsonProperty(value="ancho") double ancho
 			,@JsonProperty(value="largo") double largo,@JsonProperty(value="plataformaExterna") boolean plataformaExterna
 			,@JsonProperty(value="tipoDeCarga")TipoDeCarga tipoDeCarga,@JsonProperty(value="separacion") double separacion
-			, @JsonProperty(value="cuartosFrios") List<CuartoFrio> cuartosFrios)
+			, @JsonProperty(value="cuartosFrios") List<CuartoFrio> cuartosFrios,@JsonProperty(value="entradas") List<Operacion>entradas, @JsonProperty(value="salidas") List<Operacion>salidas)
 	{
-		super(id,estado,tipo);
+		super(id,estado,tipo,entradas,salidas);
+		
 		this.ancho=ancho;
 		this.largo=largo;
 		this.plataformaExterna=plataformaExterna;

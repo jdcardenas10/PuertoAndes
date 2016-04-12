@@ -1,5 +1,7 @@
 package vos;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Area {
@@ -22,14 +24,27 @@ public class Area {
 	private char tipo;
 	
 	/**
+	 * Id del area
+	 */
+	@JsonProperty(value="entradas")
+	private List<Operacion> entradas;
+	/**
+	 * Id del area
+	 */
+	@JsonProperty(value="salidas")
+	private  List<Operacion> salidas;
+	
+	/**
 	 * metodo constructor de la clase area
 	 * @param id el id del area
 	 */
-	public Area(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo)
+	public Area(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo,@JsonProperty(value="entradas") List<Operacion>entradas, @JsonProperty(value="salidas") List<Operacion>salidas)
 	{
 		this.id=id;
 		this.estado=estado;
 		this.tipo=tipo;
+		this.entradas=entradas;
+		this.salidas=salidas;
 	}
 
 	/**
@@ -62,6 +77,22 @@ public class Area {
 
 	public void setTipo(char tipo) {
 		this.tipo = tipo;
+	}
+
+	public List<Operacion> getEntradas() {
+		return entradas;
+	}
+
+	public void setEntradas(List<Operacion> entradas) {
+		this.entradas = entradas;
+	}
+
+	public List<Operacion> getSalidas() {
+		return salidas;
+	}
+
+	public void setSalidas(List<Operacion> salidas) {
+		this.salidas = salidas;
 	}
 	
 	

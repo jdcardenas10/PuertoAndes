@@ -115,9 +115,10 @@ public class DAOTablaAreas {
 					}
 					prepStmt3.close();
 					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
-
 					double separacion=rs2.getDouble("ANCHO");
 					prepStmt2.close();
+					
+					
 					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null);
 					areas.add(b);
 				}

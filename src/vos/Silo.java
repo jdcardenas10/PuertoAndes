@@ -1,5 +1,7 @@
 package vos;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Silo extends Area{
@@ -22,9 +24,10 @@ public class Silo extends Area{
 	 * @param nombre, el nombre del silo
 	 * @param capacidad,  la capacidad del silo
 	 */
-	public Silo(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo, @JsonProperty(value="nombre") String nombre,@JsonProperty(value="capacidad") double capacidad)
+	public Silo(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo, @JsonProperty(value="nombre") String nombre,@JsonProperty(value="capacidad") double capacidad,@JsonProperty(value="entradas") List<Operacion>entradas, @JsonProperty(value="salidas") List<Operacion>salidas)
+
 	{
-		super(id,estado,tipo);
+		super(id,estado,tipo,entradas,salidas);
 		this.nombre = nombre;
 		this.capacidad=capacidad;
 	}

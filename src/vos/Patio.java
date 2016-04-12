@@ -1,5 +1,7 @@
 package vos;
 
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Patio extends Area {
@@ -15,9 +17,10 @@ public class Patio extends Area {
 	private TipoDeCarga tipoDeCarga;
 	
 	
-	public Patio(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo, @JsonProperty(value="dimension") double dimensiones,@JsonProperty(value="tipoDeCarga") TipoDeCarga tipoDeCarga)
+	public Patio(@JsonProperty(value="id") int id, @JsonProperty(value="estado") char estado, @JsonProperty(value="tipo") char tipo, @JsonProperty(value="dimension") double dimensiones,@JsonProperty(value="tipoDeCarga") TipoDeCarga tipoDeCarga,@JsonProperty(value="entradas") List<Operacion>entradas, @JsonProperty(value="salidas") List<Operacion>salidas)
+
 	{
-		super(id,estado,tipo);
+		super(id,estado,tipo,entradas,salidas);
 		this.dimension= dimensiones;
 		this.tipoDeCarga=tipoDeCarga;
 	}
