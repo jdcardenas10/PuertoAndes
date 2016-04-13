@@ -79,11 +79,13 @@ public class DAOTablaAreas {
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
 
-		while (rs.next()) {
+		while (rs.next()) 
+		{
 
 			int id = Integer.parseInt(rs.getString("ID"));
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
+			
 			ArrayList<Operacion> entradas=new ArrayList<Operacion>();
 			ArrayList<Operacion> salidas=new ArrayList<Operacion>();
 			
@@ -92,7 +94,8 @@ public class DAOTablaAreas {
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
-			while (rs1.next()){
+			while (rs1.next())
+			{
 			
 				int idC= rs1.getInt("ID");
 				char tipoC=rs1.getString("TIPO").charAt(0);
@@ -103,30 +106,80 @@ public class DAOTablaAreas {
 				recursos.add(prepStmt11);
 				ResultSet rs11 = prepStmt11.executeQuery();
 				Carga carga=null;
-				while(rs1.next()){
+				while(rs11.next())
+				{
 
-					String nombre1=rs1.getString("NOMBRE");
-					Double peso=Double.parseDouble(rs1.getString("PESO"));
-					int dias=Integer.parseInt(rs1.getString("DIAS_EN_PUERTO"));
-					char estadoCarga=rs1.getString("ESTADO").charAt(0);
-					int tipoCarga=Integer.parseInt(rs1.getString("ID_TIPO_CARGA"));
+					String nombre1=rs11.getString("NOMBRE");
+					Double peso=Double.parseDouble(rs11.getString("PESO"));
+					int dias=Integer.parseInt(rs11.getString("DIAS_EN_PUERTO"));
+					char estadoCarga=rs11.getString("ESTADO").charAt(0);
+					int tipoCarga=Integer.parseInt(rs11.getString("ID_TIPO_CARGA"));
 
-					String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-					PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-					recursos.add(prepStmt2);
-					ResultSet rs2 = prepStmt2.executeQuery();
-					TipoDeCarga tipo=null;
+					String sql12 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt12 = conn.prepareStatement(sql12);
+					recursos.add(prepStmt12);
+					ResultSet rs12 = prepStmt12.executeQuery();
+					TipoDeCarga tipoDeCarga;
 					String nombre2=null;
-					while(rs2.next())
-					{nombre2=rs2.getString("NOMBRE");}
-
-					tipo=new TipoDeCarga(tipoCarga,nombre2);
-
-					cargas.add(new Carga(id1,nombre1,peso,estadoCarga,dias,tipo));
+					while(rs12.next())
+					{
+						nombre2=rs12.getString("NOMBRE");
+					}
+					prepStmt12.close();
+					tipoDeCarga= new TipoDeCarga(tipoCarga,nombre2);
+					
+					carga= new Carga(idCarga,nombre1,peso,estadoCarga,dias,tipoDeCarga);
+				}
+				prepStmt11.close();
+				salidas.add(new Operacion(idC,tipoC,null,carga));
 			}
+			prepStmt1.close();
 			
+			String sql21 = "select * from OPERACIONES NATURAL JOIN DESCARGUES WHERE ID_AREA="+id;
+			PreparedStatement prepStmt21 = conn.prepareStatement(sql21);
+			recursos.add(prepStmt21);
+			ResultSet rs21 = prepStmt21.executeQuery();
+			while (rs21.next())
+			{
 			
+				int idC= rs21.getInt("ID");
+				char tipoC=rs21.getString("TIPO").charAt(0);
+				int idCarga=rs21.getInt("ID_CARGA");
+				
+				String sql211 = "select * from CARGAS WHERE ID="+idCarga;
+				PreparedStatement prepStmt211 = conn.prepareStatement(sql211);
+				recursos.add(prepStmt211);
+				ResultSet rs211 = prepStmt211.executeQuery();
+				Carga carga=null;
+				while(rs211.next())
+				{
 
+					String nombre1=rs211.getString("NOMBRE");
+					Double peso=Double.parseDouble(rs211.getString("PESO"));
+					int dias=Integer.parseInt(rs211.getString("DIAS_EN_PUERTO"));
+					char estadoCarga=rs211.getString("ESTADO").charAt(0);
+					int tipoCarga=Integer.parseInt(rs211.getString("ID_TIPO_CARGA"));
+
+					String sql212 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+					PreparedStatement prepStmt212 = conn.prepareStatement(sql212);
+					recursos.add(prepStmt212);
+					ResultSet rs212 = prepStmt212.executeQuery();
+					TipoDeCarga tipoDeCarga;
+					String nombre2=null;
+					while(rs212.next())
+					{
+						nombre2=rs212.getString("NOMBRE");
+					}
+					prepStmt212.close();					
+					tipoDeCarga= new TipoDeCarga(tipoCarga,nombre2);
+					
+					carga= new Carga(idCarga,nombre1,peso,estadoCarga,dias,tipoDeCarga);
+				}
+				prepStmt211.close();
+				entradas.add(new Operacion(idC,tipoC,null,carga));
+			}
+			prepStmt21.close();
+			
 			if(tipo=='B')
 			{
 				String sql2 = "SELECT * from BODEGAS WHERE ID="+id;
@@ -145,7 +198,8 @@ public class DAOTablaAreas {
 					{
 						plataformaExterna=true;
 					}
-					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+					
+					int tipoCarga=rs2.getInt("ID_TIPO_CARGA");
 
 					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
@@ -160,12 +214,11 @@ public class DAOTablaAreas {
 					prepStmt3.close();
 					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
 					double separacion=rs2.getDouble("ANCHO");
-					prepStmt2.close();
-					
 					
 					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null,entradas,salidas);
 					areas.add(b);
 				}
+				prepStmt2.close();
 
 			}
 			else if(tipo=='C')
@@ -180,7 +233,7 @@ public class DAOTablaAreas {
 				while (rs2.next())
 				{
 					double dimensiones=rs2.getDouble("DIMENSIONES");
-					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+					int tipoCarga=rs2.getInt("ID_TIPO_CARGA");
 
 					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
@@ -195,11 +248,10 @@ public class DAOTablaAreas {
 					prepStmt3.close();
 					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
 
-					
-					prepStmt2.close();
 					Cobertizo c = new Cobertizo(id,estado,tipo,dimensiones,tipoDeCarga,entradas,salidas);
 					areas.add(c);
 				}
+				prepStmt2.close();
 			}
 			else if(tipo=='P')
 			{
@@ -213,7 +265,7 @@ public class DAOTablaAreas {
 				while (rs2.next())
 				{
 					double dimensiones=rs2.getDouble("DIMENSIONES");
-					int tipoCarga=rs2.getInt("TIPO_DE_CARGA");
+					int tipoCarga=rs2.getInt("ID_TIPO_CARGA");
 
 					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
 					PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
@@ -228,11 +280,10 @@ public class DAOTablaAreas {
 					prepStmt3.close();
 					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
 
-					
-					prepStmt2.close();
 					Patio p = new Patio(id,estado,tipo,dimensiones,tipoDeCarga,entradas,salidas);
 					areas.add(p);
 				}
+				prepStmt2.close();
 			}
 			
 			else if(tipo=='S')
@@ -252,6 +303,7 @@ public class DAOTablaAreas {
 					Silo s = new Silo(id,estado,tipo,nombre,capacidad,entradas,salidas);
 					areas.add(s);
 				}
+				prepStmt2.close();
 			}
 		}
 
