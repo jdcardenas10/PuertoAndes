@@ -11,6 +11,8 @@ import java.util.Properties;
 
 import dao.DAOTablaAdministradores;
 import dao.DAOTablaAreas;
+import dao.DAOTablaBuques;
+import dao.DAOTablaCargas;
 import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
@@ -20,6 +22,7 @@ import dao.DAOTablaSalidas;
 import dao.DaoTablaTiposYBuques;
 import vos.Administrador;
 import vos.Area;
+import vos.Carga;
 import vos.CargaBuque;
 import vos.Entrega;
 import vos.Exportador;
@@ -605,8 +608,46 @@ public class PuertoAndesMaster {
 		
 	}
 	
-	public void RF10(){
+	public void RF10(int buque,List<Integer> cargas) throws SQLException{
 		
+		DAOTablaCargas dao1=new DAOTablaCargas();
+		DAOTablaBuques dao2=new DAOTablaBuques();
+		DaoTablaTiposYBuques dao3= new DaoTablaTiposYBuques();
+		try {
+			this.conn=darConexion();
+			dao1.setConn(conn);
+			double total=0;
+			for(int i=0;i<cargas.size();i++){
+				Carga carga=dao1.buscarCargaPorID(cargas.get(i));
+				if(carga.getEstado()=='A')
+				{
+					carga.setEstado('B');
+					total=carga.getPeso();
+					if(dao3.existe(buque, carga.getTipoCarga().getId()).size()>0){dao3.addTipoCarga(carga.getTipoCarga().getId(), buque);}
+					dao1.cargar(carga,buque);
+				}
+			}
+			dao2.actualizarBuque(total);
+			conn.commit();
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+		    conn.rollback();
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("SQLException:" + e.getMessage());
+			conn.rollback();
+			e.printStackTrace();
+	    } finally {
+		try {
+			dao1.cerrarRecursos();
+			if(this.conn!=null)
+				this.conn.close();
+		} catch (SQLException exception) {
+			System.err.println("SQLException closing resources:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		}
+	    }
 	}
 	
 	public void RF12(){

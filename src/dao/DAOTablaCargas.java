@@ -62,7 +62,7 @@ public class DAOTablaCargas {
 	 */
 	public ArrayList<Carga> darCargas() throws SQLException, Exception {
 
-		String sql = "select * from CARGAS";
+		String sql = "SELECT C.*,T.NOMBRE AS TIPO FROM CARGAS C JOIN TIPOS_DE_CARGAS T ON C.ID_TIPO_CARGA=T.ID";
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
@@ -74,16 +74,9 @@ public class DAOTablaCargas {
 			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
 			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
-			
-			String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt.executeQuery();
-			TipoDeCarga tipo=null;
-			
-			String nombre2=rs2.getString("NOMBRE");
-			
-			tipo=new TipoDeCarga(tipoCarga,nombre2);
+			String nombre2=rs.getString("TIPO");
+
+			TipoDeCarga tipo=new TipoDeCarga(tipoCarga,nombre2);
 			
 			cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
 		}
@@ -101,34 +94,23 @@ public class DAOTablaCargas {
 	public Carga buscarCargaPorID(int idn) throws SQLException, Exception {
 		Carga carga=null;
 
-		String sql = "SELECT * from CARGAS WHERE ID ="+idn;
-
-		System.out.println("SQL stmt:" + sql);
-
+		String sql = "SELECT C.*,T.NOMBRE AS TIPO FROM CARGAS C JOIN TIPOS_DE_CARGAS T ON C.ID_TIPO_CARGA=T.ID WHERE C.ID="+idn;
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-
-		while (rs.next()) {
+		while(rs.next()){
 			int id1 =Integer.parseInt(rs.getString("ID"));
 			String nombre1=rs.getString("NOMBRE");
 			Double peso=Double.parseDouble(rs.getString("PESO"));
 			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
 			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
+			String nombre2=rs.getString("TIPO");
+
+			TipoDeCarga tipo=new TipoDeCarga(tipoCarga,nombre2);
 			
-			String sql2 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
-            PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt.executeQuery();
-			TipoDeCarga tipo=null;
-			
-			String nombre2=rs2.getString("NOMBRE");
-			
-			tipo=new TipoDeCarga(tipoCarga,nombre2);
 			carga=new Carga(id1,nombre1,peso,estado,dias,tipo);
 		}
-
 		return carga;
 	}
 
@@ -171,5 +153,10 @@ public class DAOTablaCargas {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeUpdate();
+	}
+
+	public void cargar(Carga carga, int buque) {
+		// TODO Auto-generated method stub
+		
 	}
 }

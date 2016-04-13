@@ -38,7 +38,7 @@ public class Carga {
 	/**
 	 * tipo de carga de la carga
 	 */
-	@JsonProperty(value="tipoCarga")
+	//@JsonProperty(value="tipoCarga")
 	private TipoDeCarga tipoCarga;
 
 	/**
@@ -57,7 +57,7 @@ public class Carga {
 		this.peso = peso;
 		this.estado = estado;
 		this.diasEnPuerto = diasEnPuerto;
-		this.tipoCarga = tipoCarga;
+		this.setTipoCarga(tipoCarga);
 	}
 	
 	/**
@@ -138,6 +138,14 @@ public class Carga {
 	 */
 	public void setDiasEnPuerto(int diasEnPuerto) {
 		this.diasEnPuerto = diasEnPuerto;
+	}
+
+	public TipoDeCarga getTipoCarga() {
+		return tipoCarga;
+	}
+
+	public void setTipoCarga(TipoDeCarga tipoCarga) {
+		this.tipoCarga = tipoCarga;
 	}
 	
 }

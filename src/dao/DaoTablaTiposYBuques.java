@@ -58,10 +58,30 @@ public class DaoTablaTiposYBuques {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public ArrayList<TipoDeCarga> TipoDeCargaPorBuque(int idn) throws SQLException, Exception {
+	public ArrayList<TipoDeCarga> tipoDeCargaPorBuque(int idn) throws SQLException, Exception {
 		ArrayList<TipoDeCarga> tipos = new ArrayList<TipoDeCarga>();
 
 		String sql = "SELECT * FROM TIPO_CARGAS_DE_BUQUES B JOIN TIPOS_DE_CARGAS C ON B.ID_TIPO_CARGA=C.ID WHERE ID_BUQUE ="+idn;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			int id = Integer.parseInt(rs.getString("ID"));
+			String nombre = rs.getString("NOMBRE");
+			tipos.add(new TipoDeCarga(id, nombre));
+		}
+
+		return tipos;
+	}
+	
+	public ArrayList<TipoDeCarga> existe(int idn,int tipoCarga) throws SQLException, Exception {
+		ArrayList<TipoDeCarga> tipos = new ArrayList<TipoDeCarga>();
+
+		String sql = "SELECT * FROM TIPO_CARGAS_DE_BUQUES B JOIN TIPOS_DE_CARGAS C ON B.ID_TIPO_CARGA=C.ID WHERE ID_BUQUE ="+idn+" AND C.ID="+tipoCarga;
 
 		System.out.println("SQL stmt:" + sql);
 

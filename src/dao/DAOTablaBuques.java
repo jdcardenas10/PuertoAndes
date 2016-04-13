@@ -195,4 +195,9 @@ public class DAOTablaBuques {
 		recursos.add(prepStmt);
 		prepStmt.executeUpdate();
 	}
+
+	public void actualizarBuque(double total) {
+		// TODO Auto-generated method stub
+		
+	}
 }
