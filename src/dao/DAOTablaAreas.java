@@ -528,10 +528,10 @@ public class DAOTablaAreas {
 					prepStmt31.close();
 					
 					String sql32 = "INSERT INTO MOVIMIENTOS VALUES ";
-					sql32 += "('"+id+ "',";
-					sql32 += area+",'";
+					sql32 += "('"+id+ "','";
+					sql32 += area+"','";
 					sql32 +=  rs1.getInt("ID")+"','";
-					sql32 +=  "517'";
+					sql32 +=  "517')";
 
 					System.out.println("SQL stmt:" + sql32);
 
