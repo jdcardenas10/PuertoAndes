@@ -81,7 +81,44 @@ public class DAOTablaAreas {
 		String sql = "select * from AREAS";
 		if(consulta.getEstado()!=' ')
 		{
-			
+			sql+=" WHERE ESTADO= '"+consulta.getEstado()+"'";
+			masDatos=true;
+		}
+		if(consulta.getTipo()!=' ')
+		{
+			if(masDatos==true)
+			{
+				sql+=" AND TIPO= '"+consulta.getTipo()+"'";
+			}
+			else
+			{
+				sql+=" WHERE TIPO= '"+consulta.getTipo()+"'";
+				masDatos=true;
+			}
+		}
+		if(consulta.getCantidadCargas()!=-1)
+		{
+			if(masDatos==true)
+			{
+				sql+=" AND CANTIDAD_CARGAS_ACTUAL= "+consulta.getCantidadCargas();
+			}
+			else
+			{
+				sql+=" WHERE CANTIDAD_CARGAS_ACTUAL= "+consulta.getCantidadCargas();
+				masDatos=true;
+			}
+		}
+		if(consulta.getCantidadMaxima()!=-1)
+		{
+			if(masDatos==true)
+			{
+				sql+=" AND MAXIMO_CARGAS= "+consulta.getCantidadMaxima();
+			}
+			else
+			{
+				sql+=" WHERE MAXIMO_CARGAS= "+consulta.getCantidadMaxima();
+				masDatos=true;
+			}
 		}
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -397,6 +434,9 @@ public class DAOTablaAreas {
 		ArrayList<Carga> cargas = new ArrayList<Carga>();
 		int tipo=0;
 		
+		conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+		conn.setAutoCommit(false);
+		
 		//se hace una lista con todas las cargas del area
 		
 		String sql = "SELECT * FROM CARGAS";
@@ -435,7 +475,10 @@ public class DAOTablaAreas {
 		PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 		recursos.add(prepStmt1);
 		ResultSet rs1 = prepStmt1.executeQuery();
-
+		
+		ArrayList<Integer> cantidades = new ArrayList<Integer>();
+		ArrayList<Integer> areas= new ArrayList<Integer>();
+		
 		while (rs1.next()) {
 			
 			int cuantasVacias = rs1.getInt("maximo_cargas") - rs1.getInt("cantidad_cargas_actual");
@@ -443,7 +486,6 @@ public class DAOTablaAreas {
 			for(int i=0;i<cuantasVacias;i++)
 			{
 				Carga c = cargas.remove(0);
-				
 				//cambiar carga de area
 				
 				String sql2 = "UPDATE CARGAS";
@@ -476,7 +518,7 @@ public class DAOTablaAreas {
 					sql31 += "null,'";
 					sql31 +=  "M','";
 					sql31 +=  "12/12/12 11:11:11,0','";
-					sql31 += c.getId()+"'";
+					sql31 += c.getId()+"')";
 
 					System.out.println("SQL stmt:" + sql31);
 
@@ -500,10 +542,17 @@ public class DAOTablaAreas {
 					
 				}
 				
-				//cambiar la cantidad de cargas en el area
+				areas.add(rs1.getInt("ID"));
+				cantidades.add(cuantasVacias);
+			}
+			conn.setSavepoint();
+			
+			for(int i=0;i<cantidades.size();i++)
+			{
+				//cambiar la cantidad de cargas en las areas
 				String sql4 = "UPDATE AREAS";
-				sql4 +=" SET cantidad_cargas_actual="+(rs1.getInt("cantidad_cargas_actual")+1);
-				sql4 +=" WHERE ID="+rs1.getInt("ID");
+				sql4 +=" SET cantidad_cargas_actual="+cantidades.get(i);
+				sql4 +=" WHERE ID="+areas.get(i);
 				
 				System.out.println("SQL stmt:" + sql4);
 
@@ -512,7 +561,7 @@ public class DAOTablaAreas {
 				prepStmt4.executeUpdate();
 				prepStmt4.close();
 			}
-			conn.setSavepoint();
+	
 		}
 		
 		//cambiar estado del area

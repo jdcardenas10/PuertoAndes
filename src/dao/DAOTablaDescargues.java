@@ -2,9 +2,12 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import vos.Carga;
 import vos.Descargue;
+import vos.TipoDeCarga;
 
 public class DAOTablaDescargues {
 	/**
@@ -48,8 +51,44 @@ public class DAOTablaDescargues {
 		this.conn = con;
 	}
 
-	public Descargue addDescarga() {
-		// TODO Auto-generated method stub
+	public ArrayList<Descargue> addDescarga(int buque) throws Exception{
+		
+		ArrayList<Descargue> descargues = new ArrayList<Descargue>();
+		
+		ArrayList<Carga> cargas = new ArrayList<Carga>();
+		
+		conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+		conn.setAutoCommit(false);
+		
+		String sql = "SELECT * FROM CARGAS";
+		sql +=" WHERE ID_BUQUE="+buque;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+
+			int idCarga =rs.getInt("ID");
+			String nombreCarga=rs.getString("NOMBRE");
+			Double peso=Double.parseDouble(rs.getString("PESO"));
+			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
+			char estado=rs.getString("ESTADO").charAt(0);
+			int tipoCarga=rs.getInt("ID_TIPO_CARGA");
+			
+			cargas.add(new Carga(idCarga,nombreCarga,peso,estado,dias,new TipoDeCarga(tipoCarga,null)));
+		}
+		rs.close();
+		conn.setSavepoint();
+		
+		/*String sql1 = "SELECT * FROM AREAS";
+		sql1 +=" WHERE maximo_cargas>cantidad_cargas_actual";
+		sql1 +=" AND tipo_de_carga=";
+
+		*/
+		
 		return null;
 	}
 }

@@ -48,11 +48,11 @@ public class AreaServices {
      * el error que se produjo
 	 */
 	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/{estado}/{tipo}/{can}/{max}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getAreas(ConsultaAreas c) {
+	public Response getAreas(@javax.ws.rs.PathParam("estado") String estado,@javax.ws.rs.PathParam("tipo") String tipo,@javax.ws.rs.PathParam("can") int cantidad,@javax.ws.rs.PathParam("max") int maximo) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
-		
+		ConsultaAreas c = new ConsultaAreas(estado.charAt(0),tipo.charAt(0),cantidad,maximo);
 		List<Area> areas;
 		try {
 			areas = tm.darAreas(c);

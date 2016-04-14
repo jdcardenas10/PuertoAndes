@@ -595,10 +595,12 @@ public class PuertoAndesMaster {
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
+			conn.rollback();
 			throw e;
 		} catch (Exception e) {
 			System.err.println("GeneralException:" + e.getMessage());
 			e.printStackTrace();
+			conn.rollback();
 			throw e;
 		} finally {
 			try {
@@ -682,24 +684,26 @@ public class PuertoAndesMaster {
 		}
 	}
 
-	public Descargue addDescarga(int buque) throws Exception {
+	public List<Descargue> addDescarga(int buque) throws Exception {
 		DAOTablaDescargues dao = new DAOTablaDescargues();
-		Descargue d=null;
+		ArrayList<Descargue> d = new ArrayList<Descargue>();
 		try 
 		{
 
 			this.conn = darConexion();
 			dao.setConn(conn);
-			d=dao.addDescarga();
+			d=dao.addDescarga(buque);
 			conn.commit();
 
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
+			conn.rollback();
 			throw e;
 		} catch (Exception e) {
 			System.err.println("GeneralException:" + e.getMessage());
 			e.printStackTrace();
+			conn.rollback();
 			throw e;
 		} finally {
 			try {

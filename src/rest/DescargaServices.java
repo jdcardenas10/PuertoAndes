@@ -43,7 +43,7 @@ public class DescargaServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addDescargue(@javax.ws.rs.PathParam("id") int buque) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
-		Descargue d=null;
+		List<Descargue> d=null;
 		try {
 			d = tm.addDescarga(buque);
 		} catch (Exception e) {
