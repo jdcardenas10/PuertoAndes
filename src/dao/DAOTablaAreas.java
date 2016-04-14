@@ -11,6 +11,7 @@ import vos.Area;
 import vos.Bodega;
 import vos.Carga;
 import vos.Cobertizo;
+import vos.ConsultaAreas;
 import vos.Operacion;
 import vos.Patio;
 import vos.Silo;
@@ -71,10 +72,17 @@ public class DAOTablaAreas {
 	 * @throws SQLException - Cualquier error que la base de datos arroje.
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
-	public ArrayList<Area> darAreas() throws SQLException, Exception {
+	public ArrayList<Area> darAreas(ConsultaAreas consulta) throws SQLException, Exception {
+		
 		ArrayList<Area> areas = new ArrayList<Area>();
-
+		
+		boolean masDatos=false;
+		
 		String sql = "select * from AREAS";
+		if(consulta.getEstado()!=' ')
+		{
+			
+		}
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);

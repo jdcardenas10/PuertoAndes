@@ -26,6 +26,7 @@ import vos.Administrador;
 import vos.Area;
 import vos.Carga;
 import vos.CargaBuque;
+import vos.ConsultaAreas;
 import vos.Descargue;
 import vos.Entrega;
 import vos.Exportador;
@@ -540,7 +541,7 @@ public class PuertoAndesMaster {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Area> darAreas() throws Exception{
+	public List<Area> darAreas(ConsultaAreas c) throws Exception{
 		ArrayList<Area> areas;
 		DAOTablaAreas dao=new DAOTablaAreas();
 
@@ -549,7 +550,7 @@ public class PuertoAndesMaster {
 			//////Transacción
 			this.conn = darConexion();
 			dao.setConn(conn);
-			areas = dao.darAreas();
+			areas = dao.darAreas(c);
 
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import tm.PuertoAndesMaster;
 import vos.Area;
 import vos.Carga;
+import vos.ConsultaAreas;
 
 @Path("areas")
 public class AreaServices {
@@ -46,13 +48,14 @@ public class AreaServices {
      * el error que se produjo
 	 */
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getAreas() {
+	public Response getAreas(ConsultaAreas c) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		
 		List<Area> areas;
 		try {
-			areas = tm.darAreas();
+			areas = tm.darAreas(c);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
