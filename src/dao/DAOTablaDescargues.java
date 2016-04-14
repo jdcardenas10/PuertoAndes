@@ -62,6 +62,7 @@ public class DAOTablaDescargues {
 		
 		String sql = "SELECT * FROM CARGAS";
 		sql +=" WHERE ID_BUQUE="+buque;
+		sql +=" AND ID_PUERTO_DESTINO= 0";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -83,12 +84,23 @@ public class DAOTablaDescargues {
 		rs.close();
 		conn.setSavepoint();
 		
-		/*String sql1 = "SELECT * FROM AREAS";
-		sql1 +=" WHERE maximo_cargas>cantidad_cargas_actual";
-		sql1 +=" AND tipo_de_carga=";
+		for(int i=0;i<cargas.size();i++)
+		{
+			String sql1 = "SELECT * FROM AREA";
+			sql1 +=" WHERE TIPO_DE_CARGA="+cargas.get(i);
+			sql1 +=" AND maximo_cargas>cantidad_cargas_actual";
 
-		*/
+			System.out.println("SQL stmt:" + sql1);
+
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			recursos.add(prepStmt1);
+			ResultSet rs1 = prepStmt1.executeQuery();
+			while (rs1.next())
+			{
+				
+			}
+		}
 		
-		return null;
+		return descargues;
 	}
 }
