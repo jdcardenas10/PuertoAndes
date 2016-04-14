@@ -196,8 +196,16 @@ public class DAOTablaBuques {
 		prepStmt.executeUpdate();
 	}
 
-	public void actualizarBuque(double total) {
-		// TODO Auto-generated method stub
+	public void actualizarBuque(int buque,double total) throws SQLException {
+		String sql = "UPDATE BUQUES SET ";
+		sql += "UTILIZADO=UTILIZADO" + total;
+		sql += " WHERE id = " + buque;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		prepStmt.executeUpdate();
 		
 	}
 }

@@ -19,6 +19,7 @@ import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
 import dao.DAOTablaImportadores;
+import dao.DAOTablaMovimientos;
 import dao.DAOTablaMuelles;
 import dao.DAOTablaSalidas;
 import dao.DaoTablaTiposYBuques;
@@ -639,7 +640,7 @@ public class PuertoAndesMaster {
 					dao4.addCargues(carga.getId(), operador,carga.getArea(),buque);
 				}
 			}
-			dao2.actualizarBuque(total);
+			dao2.actualizarBuque(buque,total);
 			conn.commit();
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -670,7 +671,15 @@ public class PuertoAndesMaster {
 	}
 
 	public List<Movimiento> RFC5(){
-		return null;
+		DAOTablaMovimientos dao=new DAOTablaMovimientos();
+		try {
+			this.conn=darConexion();
+			return dao.darMovimientos();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Descargue addDescarga(int buque) throws Exception {

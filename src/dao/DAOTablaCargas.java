@@ -160,8 +160,17 @@ public class DAOTablaCargas {
 		prepStmt.executeUpdate();
 	}
 
-	public void cargar(Carga carga, int buque) {
-		// TODO Auto-generated method stub
+	public void cargar(Carga carga, int buque) throws SQLException {
+		String sql = "UPDATE CARGAS SET ";
+		sql += "ID_AREA=null, ";
+		sql += "ID_BUQUE=" + buque;
+		sql += " WHERE id = " + carga.getId();
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		prepStmt.executeUpdate();
 		
 	}
 }
