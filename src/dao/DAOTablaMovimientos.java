@@ -63,10 +63,14 @@ public class DAOTablaMovimientos {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			String nombre = rs.getString("ID_ORIGEN");
-			String login = rs.getString("ID_DESTINO");
-			String clave = rs.getString("CLAVE");
-			movimientos.add(new Movimiento(id, 'g', null, null));
+			String idOrigen = rs.getString("ID_ORIGEN");
+			String ldDestino = rs.getString("ID_DESTINO");
+			String operador=rs.getString("ID_OPERADOR");
+			String factura = rs.getString("ID_FACTURA");
+			char tipo = rs.getString("TIPO").charAt(0);
+			String fecha=rs.getString("FECHA");
+			String idCarga=rs.getString("ID_CARGA");
+			movimientos.add(new Movimiento(id, tipo, null, null));
 		}
 		return movimientos;
 	}

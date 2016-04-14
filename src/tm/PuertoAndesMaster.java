@@ -13,6 +13,7 @@ import dao.DAOTablaAdministradores;
 import dao.DAOTablaAreas;
 import dao.DAOTablaBuques;
 import dao.DAOTablaCargas;
+import dao.DAOTablaCargues;
 import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
@@ -24,6 +25,7 @@ import vos.Administrador;
 import vos.Area;
 import vos.Carga;
 import vos.CargaBuque;
+import vos.Cargue;
 import vos.Entrega;
 import vos.Exportador;
 import vos.Factura;
@@ -608,11 +610,13 @@ public class PuertoAndesMaster {
 		
 	}
 	
-	public void RF10(int buque,List<Integer> cargas) throws SQLException{
+	public void RF10(int buque,int operador,List<Integer> cargas) throws SQLException{
 		
 		DAOTablaCargas dao1=new DAOTablaCargas();
 		DAOTablaBuques dao2=new DAOTablaBuques();
 		DaoTablaTiposYBuques dao3= new DaoTablaTiposYBuques();
+		DAOTablaCargues dao4=new DAOTablaCargues();
+		
 		try {
 			this.conn=darConexion();
 			dao1.setConn(conn);
@@ -622,9 +626,11 @@ public class PuertoAndesMaster {
 				if(carga.getEstado()=='A')
 				{
 					carga.setEstado('B');
-					total=carga.getPeso();
-					if(dao3.existe(buque, carga.getTipoCarga().getId()).size()>0){dao3.addTipoCarga(carga.getTipoCarga().getId(), buque);}
+					total+=carga.getPeso();
+					if(dao3.existe(buque, carga.getTipoCarga().getId()).size()==0){dao3.addTipoCarga(carga.getTipoCarga().getId(), buque);}
 					dao1.cargar(carga,buque);
+					Cargue cargue=new Cargue(0,'C',null,carga,new Area());
+					dao4.addCargues(cargue, operador);
 				}
 			}
 			dao2.actualizarBuque(total);
@@ -640,6 +646,8 @@ public class PuertoAndesMaster {
 	    } finally {
 		try {
 			dao1.cerrarRecursos();
+			dao2.cerrarRecursos();
+			dao3.cerrarRecursos();
 			if(this.conn!=null)
 				this.conn.close();
 		} catch (SQLException exception) {

@@ -2,7 +2,11 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import vos.Administrador;
+import vos.Cargue;
 
 public class DAOTablaCargues {
 
@@ -45,6 +49,28 @@ public class DAOTablaCargues {
 	 */
 	public void setConn(Connection con){
 		this.conn = con;
+	}
+	
+	public void addCargues(Cargue cargue,int operador) throws SQLException, Exception {
+
+		String sql = "INSERT INTO Operaciones VALUES (";
+		sql += cargue.getId() + ",";
+		sql += "null" + ",'";
+		sql += cargue.getTipo() + "',";
+		sql += "CURRENT_DATE" + ",";
+		sql += cargue.getCarga().getId() +")";
+		
+		String sql2="INSERT INTO Cargues VALUES ("+cargue.getId()+","+operador+","+cargue.getArea().getId()+","+cargue.getBuque().getId()+")";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt);
+		recursos.add(prepStmt2);
+		prepStmt.executeUpdate();
+		prepStmt2.executeUpdate();
+
 	}
 	
 	
