@@ -14,6 +14,7 @@ import dao.DAOTablaAreas;
 import dao.DAOTablaBuques;
 import dao.DAOTablaCargas;
 import dao.DAOTablaCargues;
+import dao.DAOTablaDescargues;
 import dao.DAOTablaEntregas;
 import dao.DAOTablaExportadores;
 import dao.DAOTablaFacturas;
@@ -25,6 +26,7 @@ import vos.Administrador;
 import vos.Area;
 import vos.Carga;
 import vos.CargaBuque;
+import vos.Descargue;
 import vos.Entrega;
 import vos.Exportador;
 import vos.Factura;
@@ -670,4 +672,36 @@ public class PuertoAndesMaster {
 		return null;
 	}
 
+	public Descargue addDescarga(int buque) throws Exception {
+		DAOTablaDescargues dao = new DAOTablaDescargues();
+		Descargue d=null;
+		try 
+		{
+
+			this.conn = darConexion();
+			dao.setConn(conn);
+			d=dao.addDescarga();
+			conn.commit();
+
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}	
+		return d;
+	}
 }

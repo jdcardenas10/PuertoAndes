@@ -387,10 +387,11 @@ public class DAOTablaAreas {
 	public ArrayList<Carga> cerrarArea(int area) throws Exception {
 
 		ArrayList<Carga> cargas = new ArrayList<Carga>();
+		int tipo=0;
 		
-		conn.setTransactionIsolation(conn.TRANSACTION_SERIALIZABLE);
+		//se hace una lista con todas las cargas del area
 		
-		String sql = "SELECT ID,ID_TIPO_CARGA FROM CARGAS";
+		String sql = "SELECT * FROM CARGAS";
 		sql +=" WHERE ID_AREA="+area;
 
 		System.out.println("SQL stmt:" + sql);
@@ -405,19 +406,21 @@ public class DAOTablaAreas {
 			String nombreCarga=rs.getString("NOMBRE");
 			Double peso=Double.parseDouble(rs.getString("PESO"));
 			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
-			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
+			char estado=rs.getString("ESTADO").charAt(0);
 			int tipoCarga=rs.getInt("ID_TIPO_CARGA");
+			tipo=tipoCarga;
 			
 			cargas.add(new Carga(idCarga,nombreCarga,peso,estado,dias,new TipoDeCarga(tipoCarga,null)));
 		}
 		rs.close();
-		Savepoint s1= conn.setSavepoint("s1");
+		conn.setSavepoint();
+		
+		//se agregan las cargas a las areas que cumplen con las condiciones
 		
 		String sql1 = "SELECT * FROM AREAS";
-		sql1 +=" WHERE ID NOT IN="+area;
+		sql1 +=" WHERE ID NOT IN "+area;
 		sql1 +=" AND maximo_cargas>cantidad_cargas_actual";
-		sql1 +=" AND estado not in 'C'";
-		sql1 +=" AND estado not in 'C'";
+		sql1 +=" AND tipo_de_carga="+tipo;
 
 		System.out.println("SQL stmt:" + sql1);
 
@@ -427,8 +430,95 @@ public class DAOTablaAreas {
 
 		while (rs1.next()) {
 			
+			int cuantasVacias = rs1.getInt("maximo_cargas") - rs1.getInt("cantidad_cargas_actual");
 			
+			for(int i=0;i<cuantasVacias;i++)
+			{
+				Carga c = cargas.remove(0);
+				
+				//cambiar carga de area
+				
+				String sql2 = "UPDATE CARGAS";
+				sql2+=" SET ID_AREA="+rs1.getInt("ID");
+				sql2+=" WHERE ID="+c.getId();
+
+				System.out.println("SQL stmt:" + sql2);
+
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				prepStmt2.executeUpdate();
+				prepStmt2.close();
+				
+				//crear movimiento
+				
+				String sql3 = "select max(id) as num from operaciones";
+
+				System.out.println("SQL stmt:" + sql3);
+
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				ResultSet rs3 = prepStmt3.executeQuery();
+				
+				while(rs3.next())
+				{
+					int id = rs3.getInt("num")+1;
+					
+					String sql31 = "INSERT INTO OPERACIONES VALUES ";
+					sql31 += "('"+id+ "',";
+					sql31 += "null,'";
+					sql31 +=  "M','";
+					sql31 +=  "12/12/12 11:11:11,0','";
+					sql31 += c.getId()+"'";
+
+					System.out.println("SQL stmt:" + sql31);
+
+					PreparedStatement prepStmt31 = conn.prepareStatement(sql31);
+					recursos.add(prepStmt31);
+					prepStmt31.executeUpdate();
+					prepStmt31.close();
+					
+					String sql32 = "INSERT INTO MOVIMIENTOS VALUES ";
+					sql32 += "('"+id+ "',";
+					sql32 += area+",'";
+					sql32 +=  rs1.getInt("ID")+"','";
+					sql32 +=  "517'";
+
+					System.out.println("SQL stmt:" + sql32);
+
+					PreparedStatement prepStmt32 = conn.prepareStatement(sql32);
+					recursos.add(prepStmt32);
+					prepStmt32.executeUpdate();
+					prepStmt32.close();	
+					
+				}
+				
+				//cambiar la cantidad de cargas en el area
+				String sql4 = "UPDATE AREAS";
+				sql4 +=" SET cantidad_cargas_actual="+(rs1.getInt("cantidad_cargas_actual")+1);
+				sql4 +=" WHERE ID="+rs1.getInt("ID");
+				
+				System.out.println("SQL stmt:" + sql4);
+
+				PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+				recursos.add(prepStmt4);
+				prepStmt4.executeUpdate();
+				prepStmt4.close();
+			}
+			conn.setSavepoint();
 		}
+		
+		//cambiar estado del area
+		String sql5 = "UPDATE AREAS";
+		sql5 +=" SET ESTADO='C'";
+		sql5 +=" WHERE ID="+area;
+
+
+		System.out.println("SQL stmt:" + sql5);
+
+		PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
+		recursos.add(prepStmt5);
+		prepStmt5.executeUpdate();
+		
 		return cargas;
 	}
 }
