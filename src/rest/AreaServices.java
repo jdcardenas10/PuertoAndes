@@ -1,9 +1,9 @@
 package rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,8 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.PuertoAndesMaster;
-import vos.Administrador;
 import vos.Area;
+import vos.Carga;
 
 @Path("areas")
 public class AreaServices {
@@ -65,15 +65,16 @@ public class AreaServices {
 	 * @return
 	 */
 	@POST
-	@Path("/cerrar")
+	@Path("/cerrar/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void cerrarArea(int area) {
+	public Response cerrarArea(@javax.ws.rs.PathParam("id") int area) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+		List<Carga>a=new ArrayList<Carga>();
 		try {
-			tm.cerrarArea(area);
+			a= tm.cerrarArea(area);
 		} catch (Exception e) {
-			//return Response.status(500).entity(doErrorMessage(e)).build();
+			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
-		//return Response.status(200).entity(video).build();
+		return Response.status(200).entity(a).build();
 	}
 }

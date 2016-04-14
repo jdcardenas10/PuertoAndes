@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.ArrayList;
 
 import vos.Area;
@@ -85,22 +86,22 @@ public class DAOTablaAreas {
 			int id = Integer.parseInt(rs.getString("ID"));
 			char estado = rs.getString("ESTADO").charAt(0);
 			char tipo= rs.getString("TIPO").charAt(0);
-			
+
 			ArrayList<Operacion> entradas=new ArrayList<Operacion>();
 			ArrayList<Operacion> salidas=new ArrayList<Operacion>();
-			
-			
+
+
 			String sql1 = "select * from OPERACIONES NATURAL JOIN CARGUES WHERE ID_AREA="+id;
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			ResultSet rs1 = prepStmt1.executeQuery();
 			while (rs1.next())
 			{
-			
+
 				int idC= rs1.getInt("ID");
 				char tipoC=rs1.getString("TIPO").charAt(0);
 				int idCarga=rs1.getInt("ID_CARGA");
-				
+
 				String sql11 = "select * from CARGAS WHERE ID="+idCarga;
 				PreparedStatement prepStmt11 = conn.prepareStatement(sql11);
 				recursos.add(prepStmt11);
@@ -127,25 +128,25 @@ public class DAOTablaAreas {
 					}
 					prepStmt12.close();
 					tipoDeCarga= new TipoDeCarga(tipoCarga,nombre2);
-					
+
 					carga= new Carga(idCarga,nombre1,peso,estadoCarga,dias,tipoDeCarga);
 				}
 				prepStmt11.close();
 				salidas.add(new Operacion(idC,tipoC,null,carga));
 			}
 			prepStmt1.close();
-			
+
 			String sql21 = "select * from OPERACIONES NATURAL JOIN DESCARGUES WHERE ID_AREA="+id;
 			PreparedStatement prepStmt21 = conn.prepareStatement(sql21);
 			recursos.add(prepStmt21);
 			ResultSet rs21 = prepStmt21.executeQuery();
 			while (rs21.next())
 			{
-			
+
 				int idC= rs21.getInt("ID");
 				char tipoC=rs21.getString("TIPO").charAt(0);
 				int idCarga=rs21.getInt("ID_CARGA");
-				
+
 				String sql211 = "select * from CARGAS WHERE ID="+idCarga;
 				PreparedStatement prepStmt211 = conn.prepareStatement(sql211);
 				recursos.add(prepStmt211);
@@ -172,14 +173,14 @@ public class DAOTablaAreas {
 					}
 					prepStmt212.close();					
 					tipoDeCarga= new TipoDeCarga(tipoCarga,nombre2);
-					
+
 					carga= new Carga(idCarga,nombre1,peso,estadoCarga,dias,tipoDeCarga);
 				}
 				prepStmt211.close();
 				entradas.add(new Operacion(idC,tipoC,null,carga));
 			}
 			prepStmt21.close();
-			
+
 			if(tipo=='B')
 			{
 				String sql2 = "SELECT * from BODEGAS WHERE ID="+id;
@@ -198,7 +199,7 @@ public class DAOTablaAreas {
 					{
 						plataformaExterna=true;
 					}
-					
+
 					int tipoCarga=rs2.getInt("ID_TIPO_CARGA");
 
 					String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
@@ -214,7 +215,7 @@ public class DAOTablaAreas {
 					prepStmt3.close();
 					tipoDeCarga=new TipoDeCarga(tipoCarga,nombre);
 					double separacion=rs2.getDouble("ANCHO");
-					
+
 					Bodega b = new Bodega(id,estado,tipo,ancho,largo,plataformaExterna,tipoDeCarga,separacion,null,entradas,salidas);
 					areas.add(b);
 				}
@@ -285,7 +286,7 @@ public class DAOTablaAreas {
 				}
 				prepStmt2.close();
 			}
-			
+
 			else if(tipo=='S')
 			{
 				String sql2 = "SELECT * from SILOS WHERE ID="+id;
@@ -299,7 +300,7 @@ public class DAOTablaAreas {
 				{
 					String nombre=rs2.getString("NOMBRE");
 					double capacidad=rs2.getDouble("CAPACIDAD");
-					
+
 					Silo s = new Silo(id,estado,tipo,nombre,capacidad,entradas,salidas);
 					areas.add(s);
 				}
@@ -382,15 +383,52 @@ public class DAOTablaAreas {
 		prepStmt.executeUpdate();
 	}
 
-	public void cerrarArea(int area) throws Exception {
+	@SuppressWarnings("static-access")
+	public ArrayList<Carga> cerrarArea(int area) throws Exception {
 
-		String sql = "UPDATE AREAS SET ESTADO=C ";
-		sql +="WHERE ID="+area;
+		ArrayList<Carga> cargas = new ArrayList<Carga>();
+		
+		conn.setTransactionIsolation(conn.TRANSACTION_SERIALIZABLE);
+		
+		String sql = "SELECT ID,ID_TIPO_CARGA FROM CARGAS";
+		sql +=" WHERE ID_AREA="+area;
 
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		prepStmt.executeUpdate();
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+
+			int idCarga =rs.getInt("ID");
+			String nombreCarga=rs.getString("NOMBRE");
+			Double peso=Double.parseDouble(rs.getString("PESO"));
+			int dias=Integer.parseInt(rs.getString("DIAS_EN_PUERTO"));
+			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
+			int tipoCarga=rs.getInt("ID_TIPO_CARGA");
+			
+			cargas.add(new Carga(idCarga,nombreCarga,peso,estado,dias,new TipoDeCarga(tipoCarga,null)));
+		}
+		rs.close();
+		Savepoint s1= conn.setSavepoint("s1");
+		
+		String sql1 = "SELECT * FROM AREAS";
+		sql1 +=" WHERE ID NOT IN="+area;
+		sql1 +=" AND maximo_cargas>cantidad_cargas_actual";
+		sql1 +=" AND estado not in 'C'";
+		sql1 +=" AND estado not in 'C'";
+
+		System.out.println("SQL stmt:" + sql1);
+
+		PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+		recursos.add(prepStmt1);
+		ResultSet rs1 = prepStmt1.executeQuery();
+
+		while (rs1.next()) {
+			
+			
+		}
+		return cargas;
 	}
 }

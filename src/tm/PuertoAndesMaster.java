@@ -67,7 +67,7 @@ public class PuertoAndesMaster {
 	 * Atributo que guarda el driver que se va a usar para conectarse a la base de datos.
 	 */
 	private String driver;
-	
+
 	/**
 	 * Conexión a la base de datos
 	 */
@@ -122,7 +122,7 @@ public class PuertoAndesMaster {
 	////////////////////////////////////////
 
 	public void consultarArribos(){
-		
+
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class PuertoAndesMaster {
 	public List<Administrador> darAdministradores() throws Exception  {
 		ArrayList<Administrador> admins;
 		DAOTablaAdministradores dao=new DAOTablaAdministradores();
-		
+
 		try 
 		{
 			//////Transacción
@@ -171,7 +171,7 @@ public class PuertoAndesMaster {
 	public List<Importador> darImportadores() throws Exception {
 		ArrayList<Importador> importadores;
 		DAOTablaImportadores dao=new DAOTablaImportadores();
-		
+
 		try 
 		{
 			//////Transacción
@@ -209,7 +209,7 @@ public class PuertoAndesMaster {
 	public List<Entrega> darEntregas() throws Exception {
 		ArrayList<Entrega> entregas;
 		DAOTablaEntregas dao=new DAOTablaEntregas();
-		
+
 		try 
 		{
 			//////Transacción
@@ -245,7 +245,7 @@ public class PuertoAndesMaster {
 	 * @throws Exception
 	 */
 	public void addEntrega(int idCarga, int idTipoCarga, double peso) throws Exception {
-		
+
 		DAOTablaEntregas daoEntregas = new DAOTablaEntregas();
 		try 
 		{
@@ -275,7 +275,7 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
-		
+
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class PuertoAndesMaster {
 	public List<Exportador> darExportadores() throws Exception {
 		ArrayList<Exportador> exportadores;
 		DAOTablaExportadores dao=new DAOTablaExportadores();
-		
+
 		try 
 		{
 			//////Transacción
@@ -362,15 +362,15 @@ public class PuertoAndesMaster {
 			this.conn = darConexion();
 			dao1.setConn(conn);
 			dao2.setConn(conn);
-			
+
 			Muelle muelle=dao2.buscarMuellePorIDBuque(salida.getBuque().getId());
-			
-		if(muelle!=null)
-		{
-			salida.setMuelle(muelle);
-			dao2.vaciarMuelle(muelle.getId());
-			dao1.addSinFactura(salida, idAgente);
-		}
+
+			if(muelle!=null)
+			{
+				salida.setMuelle(muelle);
+				dao2.vaciarMuelle(muelle.getId());
+				dao1.addSinFactura(salida, idAgente);
+			}
 
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -392,9 +392,9 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
-		
-		
-		
+
+
+
 	}
 
 	/**
@@ -437,7 +437,7 @@ public class PuertoAndesMaster {
 	public List<Factura> darFacturas() throws Exception{
 		ArrayList<Factura> facturas;
 		DAOTablaFacturas dao=new DAOTablaFacturas();
-		
+
 		try 
 		{
 			//////Transacción
@@ -468,7 +468,7 @@ public class PuertoAndesMaster {
 	}
 
 	public void addFactura(int idBuque) throws Exception {
-		
+
 		DAOTablaFacturas daoFacturas = new DAOTablaFacturas();
 		try 
 		{
@@ -498,7 +498,7 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
-		
+
 	}
 
 	public void addTipoCargaABarco(CargaBuque relacion) throws Exception {
@@ -531,7 +531,7 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
-		
+
 	}
 
 	/**
@@ -542,7 +542,7 @@ public class PuertoAndesMaster {
 	public List<Area> darAreas() throws Exception{
 		ArrayList<Area> areas;
 		DAOTablaAreas dao=new DAOTablaAreas();
-		
+
 		try 
 		{
 			//////Transacción
@@ -577,15 +577,16 @@ public class PuertoAndesMaster {
 	 * @param area
 	 * @throws Exception
 	 */
-	public void cerrarArea(int area) throws Exception{
-		
+	public List<Carga> cerrarArea(int area) throws Exception{
+
 		DAOTablaAreas dao = new DAOTablaAreas();
+		ArrayList<Carga> a= new ArrayList<Carga>();
 		try 
 		{
-			//////Transacción
+
 			this.conn = darConexion();
 			dao.setConn(conn);
-			dao.cerrarArea(area);
+			a= dao.cerrarArea(area);
 			conn.commit();
 
 		} catch (SQLException e) {
@@ -607,16 +608,15 @@ public class PuertoAndesMaster {
 				throw exception;
 			}
 		}
-		
+		return a;
 	}
-	
 	public void RF10(int buque,int operador,List<Integer> cargas) throws SQLException{
-		
+
 		DAOTablaCargas dao1=new DAOTablaCargas();
 		DAOTablaBuques dao2=new DAOTablaBuques();
 		DaoTablaTiposYBuques dao3= new DaoTablaTiposYBuques();
 		DAOTablaCargues dao4=new DAOTablaCargues();
-		
+
 		try {
 			this.conn=darConexion();
 			dao1.setConn(conn);
@@ -637,33 +637,33 @@ public class PuertoAndesMaster {
 			conn.commit();
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
-		    conn.rollback();
+			conn.rollback();
 			e.printStackTrace();
 		} catch (Exception e) {
 			System.err.println("SQLException:" + e.getMessage());
 			conn.rollback();
 			e.printStackTrace();
-	    } finally {
-		try {
-			dao1.cerrarRecursos();
-			dao2.cerrarRecursos();
-			dao3.cerrarRecursos();
-			if(this.conn!=null)
-				this.conn.close();
-		} catch (SQLException exception) {
-			System.err.println("SQLException closing resources:" + exception.getMessage());
-			exception.printStackTrace();
-			throw exception;
+		} finally {
+			try {
+				dao1.cerrarRecursos();
+				dao2.cerrarRecursos();
+				dao3.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
 		}
-	    }
 	}
-	
+
 	public void RF12(){
-		
+
 	}
-	
+
 	public List<Movimiento> RFC5(){
 		return null;
 	}
-	
+
 }
