@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import vos.Administrador;
 import vos.Cargue;
 
 public class DAOTablaCargues {
@@ -51,16 +50,16 @@ public class DAOTablaCargues {
 		this.conn = con;
 	}
 	
-	public void addCargues(Cargue cargue,int operador) throws SQLException, Exception {
+	public void addCargues(int carga,int operador,int area,int buque) throws SQLException, Exception {
 
 		String sql = "INSERT INTO Operaciones VALUES (";
-		sql += cargue.getId() + ",";
+		sql += "(SELECT MAX(ID) FROM OPERACIONES)+1" + ",";
 		sql += "null" + ",'";
-		sql += cargue.getTipo() + "',";
+		sql += "C" + "',";
 		sql += "CURRENT_DATE" + ",";
-		sql += cargue.getCarga().getId() +")";
+		sql += carga +")";
 		
-		String sql2="INSERT INTO Cargues VALUES ("+cargue.getId()+","+operador+","+cargue.getArea().getId()+","+cargue.getBuque().getId()+")";
+		String sql2="INSERT INTO Cargues VALUES ((SELECT MAX(ID) FROM OPERACIONES),"+operador+","+area+","+buque+")";
 
 		System.out.println("SQL stmt:" + sql);
 

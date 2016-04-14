@@ -75,10 +75,13 @@ public class DAOTablaCargas {
 			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
 			String nombre2=rs.getString("TIPO");
+			int area=Integer.parseInt(rs.getString("ID_AREA"));
 
 			TipoDeCarga tipo=new TipoDeCarga(tipoCarga,nombre2);
 			
-			cargas.add(new Carga(id1,nombre1,peso,estado,dias,tipo));
+			Carga carga=new Carga(id1,nombre1,peso,estado,dias,tipo);
+			carga.setArea(area);
+			cargas.add(carga);
 		}
 		return cargas;
 	}
@@ -106,10 +109,12 @@ public class DAOTablaCargas {
 			char estado=rs.getString(rs.getString("ESTADO")).charAt(0);
 			int tipoCarga=Integer.parseInt(rs.getString("ID_TIPO_CARGA"));
 			String nombre2=rs.getString("TIPO");
+			int area=Integer.parseInt(rs.getString("ID_AREA"));
 
 			TipoDeCarga tipo=new TipoDeCarga(tipoCarga,nombre2);
 			
 			carga=new Carga(id1,nombre1,peso,estado,dias,tipo);
+			carga.setArea(area);
 		}
 		return carga;
 	}

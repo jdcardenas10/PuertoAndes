@@ -25,7 +25,6 @@ import vos.Administrador;
 import vos.Area;
 import vos.Carga;
 import vos.CargaBuque;
-import vos.Cargue;
 import vos.Entrega;
 import vos.Exportador;
 import vos.Factura;
@@ -619,7 +618,12 @@ public class PuertoAndesMaster {
 
 		try {
 			this.conn=darConexion();
+			conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			conn.setAutoCommit(false);
 			dao1.setConn(conn);
+			dao2.setConn(conn);
+			dao3.setConn(conn);
+			dao4.setConn(conn);
 			double total=0;
 			for(int i=0;i<cargas.size();i++){
 				Carga carga=dao1.buscarCargaPorID(cargas.get(i));
@@ -629,8 +633,7 @@ public class PuertoAndesMaster {
 					total+=carga.getPeso();
 					if(dao3.existe(buque, carga.getTipoCarga().getId()).size()==0){dao3.addTipoCarga(carga.getTipoCarga().getId(), buque);}
 					dao1.cargar(carga,buque);
-					Cargue cargue=new Cargue(0,'C',null,carga,new Area());
-					dao4.addCargues(cargue, operador);
+					dao4.addCargues(carga.getId(), operador,carga.getArea(),buque);
 				}
 			}
 			dao2.actualizarBuque(total);
@@ -648,6 +651,7 @@ public class PuertoAndesMaster {
 				dao1.cerrarRecursos();
 				dao2.cerrarRecursos();
 				dao3.cerrarRecursos();
+				dao4.cerrarRecursos();
 				if(this.conn!=null)
 					this.conn.close();
 			} catch (SQLException exception) {

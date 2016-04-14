@@ -38,8 +38,10 @@ public class Carga {
 	/**
 	 * tipo de carga de la carga
 	 */
-	//@JsonProperty(value="tipoCarga")
+	@JsonProperty(value="tipoCarga")
 	private TipoDeCarga tipoCarga;
+	
+	private int area;
 
 	/**
 	 * metodo constructor de la clase carga
@@ -146,6 +148,14 @@ public class Carga {
 
 	public void setTipoCarga(TipoDeCarga tipoCarga) {
 		this.tipoCarga = tipoCarga;
+	}
+
+	public int getArea() {
+		return area;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
 	}
 	
 }
