@@ -36,6 +36,7 @@ import vos.Importador;
 import vos.ListaArribosSalidas;
 import vos.Movimiento;
 import vos.Muelle;
+import vos.Operacion;
 import vos.Salida;
 
 
@@ -717,5 +718,22 @@ public class PuertoAndesMaster {
 			}
 		}	
 		return d;
+	}
+	
+	/////////////////////////////////////////////////////
+	/////////////Requerrimiento de consulta eficiente////
+	/////////////////////////////////////////////////////
+	
+	public ListaArribosSalidas RFC7(){
+		return null;
+	}
+	public ListaArribosSalidas RFC8(){
+		return null;
+	}
+	public List<Movimiento> RFC9(){
+		return null;
+	}
+	public List<Operacion> RFC10(int id1 ,int id2){
+		return null;
 	}
 }
