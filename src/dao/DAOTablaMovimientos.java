@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import vos.Administrador;
 import vos.Movimiento;
@@ -73,5 +74,10 @@ public class DAOTablaMovimientos {
 			movimientos.add(new Movimiento(id, tipo, null, null));
 		}
 		return movimientos;
+	}
+
+	public List<Movimiento> obtenerMovimientos(int valor, int tipo, int exportador) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

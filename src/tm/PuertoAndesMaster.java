@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import dao.DAOTablaAdministradores;
 import dao.DAOTablaAreas;
+import dao.DAOTablaArribos;
 import dao.DAOTablaBuques;
 import dao.DAOTablaCargas;
 import dao.DAOTablaCargues;
@@ -724,16 +725,63 @@ public class PuertoAndesMaster {
 	/////////////Requerrimiento de consulta eficiente////
 	/////////////////////////////////////////////////////
 	
-	public ListaArribosSalidas RFC7(int inicio, int fin, String nombre, int tipo, String barco, String param, String forma){
-		return null;
+	public ListaArribosSalidas RFC7(int inicio, int fin, String nombre, int tipo, String barco, String param, String forma) throws SQLException{
+		DAOTablaSalidas dao1=new DAOTablaSalidas();
+		DAOTablaArribos dao2=new DAOTablaArribos();
+		ListaArribosSalidas lista=new ListaArribosSalidas(null,null);
+		
+		try {
+			this.conn=darConexion();
+			dao1.setConn(conn);
+			dao2.setConn(conn);
+			lista.setSalidas(dao1.obtenerSalidas(inicio,fin,nombre,tipo,barco,param,forma));
+			lista.setArribos(dao2.obtenerArribos(inicio,fin,nombre,tipo,barco,param,forma));
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+	    } finally {
+		   try {
+			dao1.cerrarRecursos();
+			dao2.cerrarRecursos();
+			if(this.conn!=null)
+				this.conn.close();
+		   } catch (SQLException exception) {
+			System.err.println("SQLException closing resources:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		}
+	}	
+		return lista;
 	}
 	public ListaArribosSalidas RFC8(){
 		return null;
 	}
-	public List<Movimiento> RFC9(int valor, int tipo, int exportador){
-		return null;
+	public List<Movimiento> RFC9(int valor, int tipo, int exportador) throws SQLException{
+		DAOTablaMovimientos dao=new DAOTablaMovimientos();
+		
+		try {
+			this.conn=darConexion();
+			dao.setConn(conn);
+			return dao.obtenerMovimientos(valor,tipo,exportador);
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
 	}
-	public List<Operacion> RFC10(int id1 ,int id2){
+	
+	public List<Movimiento> RFC10(int id1 ,int id2){
 		return null;
 	}
 }
