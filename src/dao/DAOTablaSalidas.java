@@ -62,7 +62,7 @@ public class DAOTablaSalidas {
 	 * @throws Exception - Cualquier error que no corresponda a la base de datos
 	 */
 	@SuppressWarnings("deprecation")
-	public ArrayList<Salida> consultarArribos() throws SQLException, Exception {
+	public ArrayList<Salida> consultarSalidas() throws SQLException, Exception {
 		ArrayList<Salida> salidas = new ArrayList<Salida>();
 
 		String sql = "select * from SALIDAS NATURAL JOIN OPERACIONES";
@@ -102,7 +102,7 @@ public class DAOTablaSalidas {
 	public Salida buscarPorID(int idn) throws SQLException, Exception {
 		Salida salida = null;
 
-		String sql = "select * from ARRIBOS NATURAL JOIN OPERACIONES WHERE ID ="+idn;
+		String sql = "select * from SALIDAS NATURAL JOIN OPERACIONES WHERE ID ="+idn;
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -236,5 +236,25 @@ public class DAOTablaSalidas {
     		}
     		
     		return lista;
+	}
+
+	public List<Salida> obtenerSalidasRFC8(String inicio, String fin,
+			int buque, int tipoCarga) throws Exception {
+		
+		ArrayList<Salida> lista=new ArrayList<Salida>();
+		String sql= "SELECT * FROM (SELECT * FROM OPERACIONES WHERE TIPO IN ('S') AND FECHA BETWEEN '"+inicio+"' AND '"+fin+"')" 
+                  +"NATURAL JOIN (SELECT * FROM SALIDAS NATURAL JOIN TIPO_CARGAS_DE_BUQUES WHERE ID_BUQUE NOT IN ("+buque+") AND ID_TIPO_CARGA NOT IN("+tipoCarga+"))";
+		
+		System.out.println("SQL stmt:" + sql);
+
+   		PreparedStatement prepStmt = conn.prepareStatement(sql);
+   		recursos.add(prepStmt);
+   		
+		ResultSet rs = prepStmt.executeQuery();
+		while(rs.next()){
+			
+			
+		}
+		return null;
 	}
 }

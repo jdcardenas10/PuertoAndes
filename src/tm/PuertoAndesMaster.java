@@ -720,16 +720,16 @@ public class PuertoAndesMaster {
 		}	
 		return d;
 	}
-	
+
 	/////////////////////////////////////////////////////
 	/////////////Requerrimiento de consulta eficiente////
 	/////////////////////////////////////////////////////
-	
+
 	public ListaArribosSalidas RFC7(int inicio, int fin, String nombre, int tipo, String barco, String param, String forma) throws SQLException{
 		DAOTablaSalidas dao1=new DAOTablaSalidas();
 		DAOTablaArribos dao2=new DAOTablaArribos();
 		ListaArribosSalidas lista=new ListaArribosSalidas(null,null);
-		
+
 		try {
 			this.conn=darConexion();
 			dao1.setConn(conn);
@@ -740,26 +740,52 @@ public class PuertoAndesMaster {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
 			throw e;
-	    } finally {
-		   try {
-			dao1.cerrarRecursos();
-			dao2.cerrarRecursos();
-			if(this.conn!=null)
-				this.conn.close();
-		   } catch (SQLException exception) {
-			System.err.println("SQLException closing resources:" + exception.getMessage());
-			exception.printStackTrace();
-			throw exception;
-		}
-	}	
+		} finally {
+			try {
+				dao1.cerrarRecursos();
+				dao2.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}	
 		return lista;
 	}
-	public ListaArribosSalidas RFC8(){
-		return null;
+	public ListaArribosSalidas RFC8(String inicio, String fin,int idBuque, int tipoCarga) throws Exception{
+		DAOTablaSalidas dao1=new DAOTablaSalidas();
+		DAOTablaArribos dao2=new DAOTablaArribos();
+		ListaArribosSalidas lista=new ListaArribosSalidas(null,null);
+
+		try {
+			this.conn=darConexion();
+			dao1.setConn(conn);
+			dao2.setConn(conn);
+			lista.setSalidas(dao1.obtenerSalidasRFC8(inicio,fin,idBuque,tipoCarga));
+			lista.setArribos(dao2.obtenerArribosRFC8(inicio,fin,idBuque,tipoCarga));
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao1.cerrarRecursos();
+				dao2.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}	
+		return lista;
 	}
 	public List<Movimiento> RFC9(int valor, int tipo, int exportador) throws SQLException{
 		DAOTablaMovimientos dao=new DAOTablaMovimientos();
-		
+
 		try {
 			this.conn=darConexion();
 			dao.setConn(conn);
@@ -780,8 +806,28 @@ public class PuertoAndesMaster {
 			}
 		}
 	}
-	
-	public List<Movimiento> RFC10(int id1 ,int id2){
-		return null;
+
+	public List<Movimiento> RFC10(int id1 ,int id2) throws Exception{
+		DAOTablaMovimientos dao=new DAOTablaMovimientos();
+
+		try {
+			this.conn=darConexion();
+			dao.setConn(conn);
+			return dao.obtenerMovimientosRFC10(id1,id2);
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				dao.cerrarRecursos();
+				if(this.conn!=null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
 	}
 }

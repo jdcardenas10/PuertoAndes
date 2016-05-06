@@ -176,6 +176,12 @@ public class DAOTablaArribos {
 	    		return lista;
 		}
 
+		public List<Arribo> obtenerArribosRFC8(String inicio, String fin,
+				int idBuque, int tipoCarga) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 		/**
 		 * Método que agrega el Administrador que entra como parámetro a la base de datos.
 		 * @param Administrador - el Administrador a agregar. Administrador !=  null

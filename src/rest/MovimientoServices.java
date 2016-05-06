@@ -58,5 +58,19 @@ public class MovimientoServices {
 				}
 				return Response.status(200).entity(videos).build();
 			}
+			
 
+			@GET
+			@Path("/{idUno}/{idDos}")
+			@Produces({ MediaType.APPLICATION_JSON })
+			public Response getMovimientosRFC10(@javax.ws.rs.PathParam("idUno") int idUno,@javax.ws.rs.PathParam("idDos") int idDos) {
+				PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+				List<Movimiento> movimientos;
+				try {
+					movimientos = tm.RFC10(idUno,idDos);
+				} catch (Exception e) {
+					return Response.status(500).entity(doErrorMessage(e)).build();
+				}
+				return Response.status(200).entity(movimientos).build();
+			}
 }

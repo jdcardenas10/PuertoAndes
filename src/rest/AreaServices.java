@@ -17,6 +17,7 @@ import tm.PuertoAndesMaster;
 import vos.Area;
 import vos.Carga;
 import vos.ConsultaAreas;
+import vos.Movimiento;
 
 @Path("areas")
 public class AreaServices {
@@ -80,4 +81,5 @@ public class AreaServices {
 		}
 		return Response.status(200).entity(a).build();
 	}
+	
 }

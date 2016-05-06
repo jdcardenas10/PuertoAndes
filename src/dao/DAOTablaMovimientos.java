@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vos.Administrador;
+import vos.Carga;
 import vos.Movimiento;
+import vos.TipoDeCarga;
 
 public class DAOTablaMovimientos {
 
@@ -64,14 +66,45 @@ public class DAOTablaMovimientos {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			String idOrigen = rs.getString("ID_ORIGEN");
-			String ldDestino = rs.getString("ID_DESTINO");
+			int idOrigen = rs.getInt("ID_ORIGEN");
+			int idDestino = rs.getInt("ID_DESTINO");
 			String operador=rs.getString("ID_OPERADOR");
 			String factura = rs.getString("ID_FACTURA");
 			char tipo = rs.getString("TIPO").charAt(0);
 			String fecha=rs.getString("FECHA");
 			String idCarga=rs.getString("ID_CARGA");
-			movimientos.add(new Movimiento(id, tipo, null, null));
+			
+			
+			String sql2 = "select * from CARGAS WHERE ID="+idCarga;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			Carga carga=null;
+
+			while (rs2.next())
+			{
+				String nombre2=rs2.getString("NOMBRE");
+				Double peso=Double.parseDouble(rs2.getString("PESO"));
+				char estado2=rs2.getString("ESTADO").charAt(0);
+				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
+
+				String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				ResultSet rs3 = prepStmt3.executeQuery();
+				TipoDeCarga tipo2=null;
+				while(rs3.next())
+				{
+
+					String nombre4=rs3.getString("NOMBRE");
+
+					tipo2=new TipoDeCarga(tipoCarga,nombre4);
+				}
+
+				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo2);
+			}
+			movimientos.add(new Movimiento(id, tipo, null, carga,idOrigen,idDestino));
 		}
 		return movimientos;
 	}
@@ -90,15 +123,103 @@ public class DAOTablaMovimientos {
 		while (rs.next()) {
 			
 			int id = Integer.parseInt(rs.getString("ID"));
-			String idOrigen = rs.getString("ID_ORIGEN");
-			String ldDestino = rs.getString("ID_DESTINO");
+			int idOrigen = rs.getInt("ID_ORIGEN");
+			int idDestino = rs.getInt("ID_DESTINO");
 			String operador=rs.getString("ID_OPERADOR");
 			String factura = rs.getString("ID_FACTURA");
 			char tipo1 = rs.getString("TIPO").charAt(0);
 			String fecha=rs.getString("FECHA");
 			String idCarga=rs.getString("ID_CARGA");
-			movimientos.add(new Movimiento(id, tipo1, null, null));
+			
+			String sql2 = "select * from CARGAS WHERE ID="+idCarga;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			Carga carga=null;
+
+			while (rs2.next())
+			{
+				String nombre2=rs2.getString("NOMBRE");
+				Double peso=Double.parseDouble(rs2.getString("PESO"));
+				char estado2=rs2.getString("ESTADO").charAt(0);
+				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
+
+				String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				ResultSet rs3 = prepStmt3.executeQuery();
+				TipoDeCarga tipo2=null;
+				while(rs3.next())
+				{
+
+					String nombre4=rs3.getString("NOMBRE");
+
+					tipo2=new TipoDeCarga(tipoCarga,nombre4);
+				}
+
+				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo2);
+			}
+			
+			movimientos.add(new Movimiento(id, tipo1, null, carga,idOrigen,idDestino));
 		}
+		return movimientos;
+	}
+
+	public List<Movimiento> obtenerMovimientosRFC10(int id1, int id2) throws Exception {
+		ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
+		String sql="SELECT * FROM ((SELECT * FROM AREAS WHERE ID IN ("+id1+","+id2+"))"
+			   + "NATURAL JOIN (SELECT * FROM MOVIMIENTOS NATURAL JOIN OPERACIONES WHERE ID_ORIGEN IN "
+			   +"("+id1+","+id2+") OR ID_DESTINO IN ("+id1+","+id2+")))";
+		
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			
+			int id = Integer.parseInt(rs.getString("ID"));
+			int idOrigen = rs.getInt("ID_ORIGEN");
+			int idDestino = rs.getInt("ID_DESTINO");
+			String operador=rs.getString("ID_OPERADOR");
+			String factura = rs.getString("ID_FACTURA");
+			char tipo1 = rs.getString("TIPO").charAt(0);
+			String fecha=rs.getString("FECHA");
+			String idCarga=rs.getString("ID_CARGA");
+			
+			String sql2 = "select * from CARGAS WHERE ID="+idCarga;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			Carga carga=null;
+
+			while (rs2.next())
+			{
+				String nombre2=rs2.getString("NOMBRE");
+				Double peso=Double.parseDouble(rs2.getString("PESO"));
+				char estado2=rs2.getString("ESTADO").charAt(0);
+				int dias2=Integer.parseInt(rs2.getString("DIAS_EN_PUERTO"));
+				int tipoCarga=Integer.parseInt(rs2.getString("ID_TIPO_CARGA"));
+
+				String sql3 = "select * from TIPOS_DE_CARGAS WHERE ID="+tipoCarga;
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				ResultSet rs3 = prepStmt3.executeQuery();
+				TipoDeCarga tipo2=null;
+				while(rs3.next())
+				{
+
+					String nombre4=rs3.getString("NOMBRE");
+
+					tipo2=new TipoDeCarga(tipoCarga,nombre4);
+				}
+
+				carga=new Carga(id,nombre2,peso,estado2,dias2,tipo2);
+			}
+			
+			movimientos.add(new Movimiento(id, tipo1, null, carga,idOrigen,idDestino));
+		}
+		
 		return movimientos;
 	}
 }
