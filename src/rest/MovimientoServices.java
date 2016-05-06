@@ -48,11 +48,11 @@ public class MovimientoServices {
 			@GET
 			@Path("/buscar/{valor}/{tipo}/{exportador}")
 			@Produces({ MediaType.APPLICATION_JSON })
-			public Response getMovimientosRFC9() {
+			public Response getMovimientosRFC9(@javax.ws.rs.PathParam("valor") int valor,@javax.ws.rs.PathParam("tipo") int tipo,@javax.ws.rs.PathParam("exportador") int exportador) {
 				PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 				List<Movimiento> videos;
 				try {
-					videos = tm.RFC9();
+					videos = tm.RFC9(valor,tipo,exportador);
 				} catch (Exception e) {
 					return Response.status(500).entity(doErrorMessage(e)).build();
 				}

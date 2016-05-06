@@ -724,13 +724,13 @@ public class PuertoAndesMaster {
 	/////////////Requerrimiento de consulta eficiente////
 	/////////////////////////////////////////////////////
 	
-	public ListaArribosSalidas RFC7(){
+	public ListaArribosSalidas RFC7(int inicio, int fin, String nombre, int tipo, String barco, String param, String forma){
 		return null;
 	}
 	public ListaArribosSalidas RFC8(){
 		return null;
 	}
-	public List<Movimiento> RFC9(){
+	public List<Movimiento> RFC9(int valor, int tipo, int exportador){
 		return null;
 	}
 	public List<Operacion> RFC10(int id1 ,int id2){

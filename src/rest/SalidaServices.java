@@ -65,11 +65,14 @@ public class SalidaServices {
 	@GET
 	@Path("/buscar/{inicio}/{fin}/{nombre}/{tipo}/{barco}/{param}/{forma}")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getArribos_Salidas_RFC7() {
+	public Response getArribos_Salidas_RFC7(
+			 @javax.ws.rs.PathParam("inicio") int inicio,@javax.ws.rs.PathParam("fin") int fin,@javax.ws.rs.PathParam("nombre") String nombre
+			,@javax.ws.rs.PathParam("tipo") int tipo,@javax.ws.rs.PathParam("barco") String barco
+			,@javax.ws.rs.PathParam("param") String param,@javax.ws.rs.PathParam("forma") String forma) {
 		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
 		ListaArribosSalidas lista;
 		try {
-			lista = tm.RFC7();
+			lista = tm.RFC7(inicio,fin,nombre,tipo,barco,param,forma);
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
