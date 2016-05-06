@@ -205,7 +205,7 @@ public class DAOTablaSalidas {
 
 	}
 
-	public List<Salida> obtenerSalidas(int inicio, int fin, String nombre, int tipo, String barco, String param,
+	public List<Salida> obtenerSalidasRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
 			String forma) throws SQLException {
 		
 		ArrayList<Salida> lista=new ArrayList<Salida>();

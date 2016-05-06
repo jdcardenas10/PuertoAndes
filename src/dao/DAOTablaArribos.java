@@ -142,7 +142,7 @@ public class DAOTablaArribos {
 			return arribo;
 		}
 
-		public List<Arribo> obtenerArribos(int inicio, int fin, String nombre, int tipo, String barco, String param,
+		public List<Arribo> obtenerArribosRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
 				String forma) throws SQLException {
 			ArrayList<Arribo> lista=new ArrayList<Arribo>();
 			

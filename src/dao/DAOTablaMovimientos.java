@@ -76,8 +76,29 @@ public class DAOTablaMovimientos {
 		return movimientos;
 	}
 
-	public List<Movimiento> obtenerMovimientos(int valor, int tipo, int exportador) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Movimiento> obtenerMovimientosRFC9(int valor, int tipo, int exportador) throws SQLException {
+		ArrayList<Movimiento> movimientos=new ArrayList<Movimiento>();
+		String sql="select * from (select e1.* from(select * from facturas f where f.VALOR_TOTAL>"+valor+"AND f.id_exportador="+exportador+")e"
+                   +"join (select * from operaciones natural join movimientos)e1 on e.id=e1.id_factura)e3"
+                   +"NATURAL JOIN"
+                   +"(select * from(select c.ID ID_CARGA,c.ID_TIPO_CARGA ID from cargas c where c.ID_TIPO_CARGA="+tipo+")NATURAL JOIN TIPOS_DE_CARGAS)";
+		
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			
+			int id = Integer.parseInt(rs.getString("ID"));
+			String idOrigen = rs.getString("ID_ORIGEN");
+			String ldDestino = rs.getString("ID_DESTINO");
+			String operador=rs.getString("ID_OPERADOR");
+			String factura = rs.getString("ID_FACTURA");
+			char tipo1 = rs.getString("TIPO").charAt(0);
+			String fecha=rs.getString("FECHA");
+			String idCarga=rs.getString("ID_CARGA");
+			movimientos.add(new Movimiento(id, tipo1, null, null));
+		}
+		return movimientos;
 	}
 }

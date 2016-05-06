@@ -734,8 +734,8 @@ public class PuertoAndesMaster {
 			this.conn=darConexion();
 			dao1.setConn(conn);
 			dao2.setConn(conn);
-			lista.setSalidas(dao1.obtenerSalidas(inicio,fin,nombre,tipo,barco,param,forma));
-			lista.setArribos(dao2.obtenerArribos(inicio,fin,nombre,tipo,barco,param,forma));
+			lista.setSalidas(dao1.obtenerSalidasRFC7(inicio,fin,nombre,tipo,barco,param,forma));
+			lista.setArribos(dao2.obtenerArribosRFC7(inicio,fin,nombre,tipo,barco,param,forma));
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
@@ -763,7 +763,7 @@ public class PuertoAndesMaster {
 		try {
 			this.conn=darConexion();
 			dao.setConn(conn);
-			return dao.obtenerMovimientos(valor,tipo,exportador);
+			return dao.obtenerMovimientosRFC9(valor,tipo,exportador);
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
