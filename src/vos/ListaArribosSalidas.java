@@ -7,27 +7,27 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class ListaArribosSalidas {
 
 	@JsonProperty(value="arribos")
-	private List<Arribo> arribos;
+	private List<ArriboSimple> arribos;
 	
 	@JsonProperty(value="salidas")
-	private List<Salida> salidas;
+	private List<SalidaSimple> salidas;
 	
-	public ListaArribosSalidas(@JsonProperty(value="arribos") List<Arribo> arribos, @JsonProperty(value="salidas") List<Salida> salidas){
+	public ListaArribosSalidas(@JsonProperty(value="arribos") List<ArriboSimple> arribos, @JsonProperty(value="salidas") List<SalidaSimple> salidas){
 		this.arribos=arribos;
 		this.salidas=salidas;
 	}
 	
-	public List<Arribo> getArribos() {
+	public List<ArriboSimple> getArribos() {
 		return arribos;
 	}
-	public void setArribos(List<Arribo> arribos) {
-		this.arribos = arribos;
+	public void setArribos(List<ArriboSimple> list) {
+		this.arribos = list;
 	}
-	public List<Salida> getSalidas() {
+	public List<SalidaSimple> getSalidas() {
 		return salidas;
 	}
-	public void setSalidas(List<Salida> salidas) {
-		this.salidas = salidas;
+	public void setSalidas(List<SalidaSimple> list) {
+		this.salidas = list;
 	}
 	
 }

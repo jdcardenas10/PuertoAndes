@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import vos.Salida;
+import vos.SalidaSimple;
 
 public class DAOTablaSalidas {
 
@@ -205,10 +206,10 @@ public class DAOTablaSalidas {
 
 	}
 
-	public List<Salida> obtenerSalidasRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
+	public List<SalidaSimple> obtenerSalidasRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
 			String forma) throws SQLException {
 		
-		ArrayList<Salida> lista=new ArrayList<Salida>();
+		ArrayList<SalidaSimple> lista=new ArrayList<SalidaSimple>();
 		
         String sql="select v.* from(select * from operaciones o natural join salidas where fecha>='"+inicio+"' AND FECHA<='"+fin+"’ )v";
         	   sql+=" join ";
@@ -225,23 +226,24 @@ public class DAOTablaSalidas {
     		while(rs.next()){
     			int id = Integer.parseInt(rs.getString("ID"));
     			char tipo1 = rs.getString("TIPO_ARRIBO").charAt(0);
-    			String idAgente = rs.getString("ID_AGENTE");
-    			String idMuelle = rs.getString("ID_MUELLE");
+    			int idAgente = Integer.parseInt(rs.getString("ID_AGENTE"));
+    			int idMuelle = Integer.parseInt(rs.getString("ID_MUELLE"));
     			String idBuque = rs.getString("ID_BUQUE");
     			String idCamion = rs.getString("ID_CAMION");
-    			String idFactura = rs.getString("ID_FACTURA");
+    			//String idFactura = rs.getString("ID_FACTURA");
     			String fecha = rs.getString("FECHA");
-    			String fechaOrden = rs.getString("FECHA_ORDEN");
-    			String idCarga = rs.getString("ID_CARGA");
+    			//int idCarga = Integer.parseInt(rs.getString("ID_CARGA"));
+    			
+    			lista.add(new SalidaSimple(id,tipo1,idAgente,idMuelle,idBuque,idCamion,fecha));
     		}
     		
     		return lista;
 	}
 
-	public List<Salida> obtenerSalidasRFC8(String inicio, String fin,
+	public List<SalidaSimple> obtenerSalidasRFC8(String inicio, String fin,
 			int buque, int tipoCarga) throws Exception {
 		
-		ArrayList<Salida> lista=new ArrayList<Salida>();
+		ArrayList<SalidaSimple> lista=new ArrayList<SalidaSimple>();
 		String sql= "SELECT * FROM (SELECT * FROM OPERACIONES WHERE TIPO IN ('S') AND FECHA BETWEEN '"+inicio+"' AND '"+fin+"')" 
                   +"NATURAL JOIN (SELECT * FROM SALIDAS NATURAL JOIN TIPO_CARGAS_DE_BUQUES WHERE ID_BUQUE NOT IN ("+buque+") AND ID_TIPO_CARGA NOT IN("+tipoCarga+"))";
 		
@@ -252,9 +254,19 @@ public class DAOTablaSalidas {
    		
 		ResultSet rs = prepStmt.executeQuery();
 		while(rs.next()){
+			int id = Integer.parseInt(rs.getString("ID"));
+			char tipo1 = rs.getString("TIPO_ARRIBO").charAt(0);
+			int idAgente = Integer.parseInt(rs.getString("ID_AGENTE"));
+			int idMuelle = Integer.parseInt(rs.getString("ID_MUELLE"));
+			String idBuque = rs.getString("ID_BUQUE");
+			String idCamion = rs.getString("ID_CAMION");
+			//String idFactura = rs.getString("ID_FACTURA");
+			String fecha = rs.getString("FECHA");
+			//int idCarga = Integer.parseInt(rs.getString("ID_CARGA"));
 			
+			lista.add(new SalidaSimple(id,tipo1,idAgente,idMuelle,idBuque,idCamion,fecha));
 			
 		}
-		return null;
+		return lista;
 	}
 }

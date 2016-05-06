@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import vos.Arribo;
+import vos.ArriboSimple;
 import vos.Salida;
 
 
@@ -142,9 +143,9 @@ public class DAOTablaArribos {
 			return arribo;
 		}
 
-		public List<Arribo> obtenerArribosRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
+		public List<ArriboSimple> obtenerArribosRFC7(int inicio, int fin, String nombre, int tipo, String barco, String param,
 				String forma) throws SQLException {
-			ArrayList<Arribo> lista=new ArrayList<Arribo>();
+			ArrayList<ArriboSimple> lista=new ArrayList<ArriboSimple>();
 			
 	        String sql="select v.* from(select * from operaciones o natural join salidas where fecha>='"+inicio+"' AND FECHA<='"+fin+"’ )v";
 	        	   sql+=" join ";
@@ -161,25 +162,52 @@ public class DAOTablaArribos {
 	    		while(rs.next()){
 	    			int id = Integer.parseInt(rs.getString("ID"));
 	    			char tipo1 = rs.getString("TIPO_ARRIBO").charAt(0);
-	    			String idAgente = rs.getString("ID_AGENTE");
-	    			String idMuelle = rs.getString("ID_MUELLE");
-	    			String idOrigen = rs.getString("ID_ORIGEN");
-	    			String idDestino = rs.getString("ID_DESTINO");
+	    			int idAgente = Integer.parseInt(rs.getString("ID_AGENTE"));
+	    			int idMuelle = Integer.parseInt(rs.getString("ID_MUELLE"));
 	    			String idBuque = rs.getString("ID_BUQUE");
 	    			String idCamion = rs.getString("ID_CAMION");
-	    			String idFactura = rs.getString("ID_FACTURA");
+	    			//String idFactura = rs.getString("ID_FACTURA");
 	    			String fecha = rs.getString("FECHA");
-	    			String fechaOrden = rs.getString("FECHA_ORDEN");
-	    			String idCarga = rs.getString("ID_CARGA");
+	    			//int idCarga = Integer.parseInt(rs.getString("ID_CARGA"));
+	    			String idOrigen = rs.getString("ID_ORIGEN");
+	    			String idDestino = rs.getString("ID_DESTINO");
+	    			
+	    			lista.add(new ArriboSimple(id,tipo1,idAgente,idMuelle,idBuque,idCamion,fecha,idOrigen,idDestino));
 	    		}
 	    		
 	    		return lista;
 		}
 
-		public List<Arribo> obtenerArribosRFC8(String inicio, String fin,
-				int idBuque, int tipoCarga) {
-			// TODO Auto-generated method stub
-			return null;
+		public List<ArriboSimple> obtenerArribosRFC8(String inicio, String fin,
+				int idBuque, int tipoCarga) throws SQLException {
+			ArrayList<ArriboSimple> lista=new ArrayList<ArriboSimple>();
+			String sql= "SELECT * FROM (SELECT * FROM OPERACIONES WHERE TIPO IN ('A') AND FECHA BETWEEN '"+inicio+"' AND '"+fin+"')" 
+	                  +"NATURAL JOIN (SELECT * FROM SALIDAS NATURAL JOIN TIPO_CARGAS_DE_BUQUES WHERE ID_BUQUE NOT IN ("+idBuque+") AND ID_TIPO_CARGA NOT IN("+tipoCarga+"))";
+			
+			System.out.println("SQL stmt:" + sql);
+
+       		PreparedStatement prepStmt = conn.prepareStatement(sql);
+       		recursos.add(prepStmt);
+       		
+    		ResultSet rs = prepStmt.executeQuery();
+    		
+    		while(rs.next()){
+    			int id = Integer.parseInt(rs.getString("ID"));
+    			char tipo1 = rs.getString("TIPO_ARRIBO").charAt(0);
+    			int idAgente = Integer.parseInt(rs.getString("ID_AGENTE"));
+    			int idMuelle = Integer.parseInt(rs.getString("ID_MUELLE"));
+    			String idBuque1 = rs.getString("ID_BUQUE");
+    			String idCamion = rs.getString("ID_CAMION");
+    			//String idFactura = rs.getString("ID_FACTURA");
+    			String fecha = rs.getString("FECHA");
+    			//int idCarga = Integer.parseInt(rs.getString("ID_CARGA"));
+    			String idOrigen = rs.getString("ID_ORIGEN");
+    			String idDestino = rs.getString("ID_DESTINO");
+    			
+    			lista.add(new ArriboSimple(id,tipo1,idAgente,idMuelle,idBuque1,idCamion,fecha,idOrigen,idDestino));
+    		}
+    		
+    		return lista;
 		}
 
 		/**
