@@ -57,6 +57,26 @@ public class SalidaServices {
 	}
 	
 	/**
+	 * Método que expone servicio REST usando GET que da todos los arribos y salidas eficiente.
+	 * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos
+	 * @return Json con todos los videos de la base de datos O json con 
+     * el error que se produjo
+	 */
+	@GET
+	@Path("/buscar/{inicio}/{fin}/{nombre}/{tipo}/{barco}/{param}/{forma}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getArribos_Salidas_RFC7() {
+		PuertoAndesMaster tm = new PuertoAndesMaster(getPath());
+		ListaArribosSalidas lista;
+		try {
+			lista = tm.RFC7();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+		return Response.status(200).entity(lista).build();
+	}
+	
+	/**
      * Método que expone servicio REST usando PUT que agrega los videos que recibe en Json
      * <b>URL: </b> http://"ip o nombre de host":8080/VideoAndes/rest/videos/videos
      * @param videos - videos a agregar. 
