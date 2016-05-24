@@ -830,4 +830,12 @@ public class PuertoAndesMaster {
 			}
 		}
 	}
+	
+	public List<Area> RFC11(){
+		return null;
+	}
+	
+	public List<Factura> RFC12(){
+		return null;
+	}
 }
